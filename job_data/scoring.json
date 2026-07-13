@@ -58,13 +58,19 @@
         },
 
         "description" : {
-            "python": 6,
-            "c++": 3,
+            "flight dynamics": 10,
+            "astrodynamics": 10,
+            "orbital mechanics": 10,
+            "mathematics": 10,
+            "python": 9,
             "scientific computing": 5,
-            "mathematics": 7,
-            "orbital mechanics": 8,
+            "analytical": 4,
             "linux": 4,
+            "c++": 3,
             "git": 3,
-            "ci/cd": 2
+            "ci/cd": 2,
+            "+3 years": -5,
+            "+5 years": -10,
+            "+10 years": -10
         }
 }
