@@ -1,5 +1,5 @@
-from config_loader import ConfigLoader
-from scraper import Scraper
+from automated_job_search.config.config_loader import ConfigLoader
+from automated_job_search.scraper.scraper import Scraper
 
 if __name__ == "__main__":
     config_loader = ConfigLoader()
