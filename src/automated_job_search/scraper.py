@@ -56,7 +56,7 @@ class Scraper:
         job_disqualified = False
         for job in jobs_list:
             for title_disqualifer in self._config_loader.disqualifications["title"]:
-                if title_disqualifer in job.title.lower():
+                if title_disqualifer in job.title:
                     job_disqualified = True
                     break
 
@@ -74,10 +74,10 @@ class Scraper:
                 job.score -= 8
 
             for title, score in self._config_loader.scoring["title"].items():
-                if title in job.title.lower():
+                if title in job.title:
                     job.score += score
 
             for city, score in self._config_loader.scoring["city"].items():
-                if city in job.city.lower():
+                if city in job.city:
                     job.score += score
 
