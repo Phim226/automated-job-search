@@ -42,14 +42,12 @@ class Scraper:
 
         return jobs_list
 
-    def _get_space_careers_job_description(self, url: str) -> str:
-        with sync_playwright() as sp:
-            browser = sp.chromium.launch()
-            page = browser.new_page()
+    def _get_space_careers_job_details(self, job_id: str) -> dict[str, Any]:
+        api = self._jobsites["space_careers"].api
+        url = f"{api}{job_id}/"
 
-            page.goto(url)
-
-            return page.locator("div.wmde-markdown.wmde-markdown-color").inner_text()
+        response = requests.get(url)
+        return response.json()
 
     def filter_jobs(self, jobs_list: list[Job]) -> list[Job]:
         filtered_list = []
