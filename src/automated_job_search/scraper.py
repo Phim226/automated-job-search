@@ -69,16 +69,21 @@ class Scraper:
         return filtered_list
 
     def apply_scoring(self, jobs_list: list[Job]):
+        country_scores = self._config_loader.scoring["country"]
+        city_scores = self._config_loader.scoring["city"]
+        title_scores = self._config_loader.scoring["title"]
+
         for job in jobs_list:
-            for country, score in self._config_loader.scoring["country"].items():
+            for country, score in country_scores.items():
                 if country in job.country:
                     job.score += score
 
-            for title, score in self._config_loader.scoring["title"].items():
+            for city, score in city_scores.items():
+                if city in job.city:
+                    job.score += score
+
+            for title, score in title_scores.items():
                 if title in job.title:
                     job.score += score
 
-            for city, score in self._config_loader.scoring["city"].items():
-                if city in job.city:
-                    job.score += score
 
