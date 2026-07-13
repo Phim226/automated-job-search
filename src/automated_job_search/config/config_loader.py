@@ -31,12 +31,12 @@ class ConfigLoader:
     def scoring(self) -> dict[str, dict[str, int]]:
         return self._scoring
 
-    def load_space_careers_job(self, job_json: dict[str, Any], advert_url: str, description: str) -> Job:
+    def load_space_careers_job(self, job_json: dict[str, Any]) -> Job:
         return Job(
+                job_id = job_json["id"].lower(),
                 title = job_json["title"].lower(),
                 company = job_json["employer"]["name"].lower(),
                 city = job_json["city"].lower(),
                 country = job_json["country_display"].lower(),
-                description = description.lower(),
-                advert_url = advert_url
+                score = 0,
             )
