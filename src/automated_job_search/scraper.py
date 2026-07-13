@@ -37,8 +37,7 @@ class Scraper:
                 continue
 
             advert_url = f"{self._jobsites["space_careers"].url}{job["id"]}"
-            description = "" #self._get_space_careers_job_description(advert_url)
-            jobs_list.append(self._config_loader.load_space_careers_job(job, advert_url, description))
+            jobs_list.append(self._config_loader.load_space_careers_job(job, advert_url, ""))
 
         return jobs_list
 
