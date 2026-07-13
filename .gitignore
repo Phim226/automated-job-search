@@ -3,3 +3,6 @@
 
 __pycache__/
 *.pyc
+
+
+/src/automated_job_search/api_test.py
