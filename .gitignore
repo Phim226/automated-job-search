@@ -5,4 +5,6 @@ __pycache__/
 *.pyc
 
 
+# Local scripts
 /src/automated_job_search/api_test.py
+/src/automated_job_search/database_test.py
