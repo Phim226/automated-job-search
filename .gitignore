@@ -4,6 +4,8 @@
 __pycache__/
 *.pyc
 
+# Build files
+*.egg-info
 
 # Local scripts
 /src/automated_job_search/api_test.py
