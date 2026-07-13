@@ -2,7 +2,6 @@ import requests
 from typing import Any
 from job import Job
 from config_loader import ConfigLoader
-from playwright.sync_api import sync_playwright
 
 class Scraper:
 
