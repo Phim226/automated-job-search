@@ -1,9 +1,10 @@
 from typing import Any
+from pathlib import Path
 import sqlite3
 
 class ConnectionManager:
 
-    def __init__(self, database: str) -> None:
+    def __init__(self, database: str | Path) -> None:
         self.db = database
 
     def chain_query(self, query_list: list[str]) ->list[Any]:
