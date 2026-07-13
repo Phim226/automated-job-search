@@ -25,6 +25,10 @@
             "embedded": 3
         },
 
+        "employer": {
+            "open cosmos": 2
+        },
+
         "city" : {
             "leeds" : 8,
             "bradford": 6,
