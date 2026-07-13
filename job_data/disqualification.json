@@ -32,6 +32,12 @@
         "structural",
         "accounting",
         "power",
-        "nuclear"
+        "nuclear",
+        "plasma",
+        "quantum",
+        "optical",
+        "assembly",
+        "robotics",
+        "technician"
     ]
 }
