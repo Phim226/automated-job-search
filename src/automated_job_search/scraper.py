@@ -16,8 +16,7 @@ class Scraper:
         return filtered_jobs
 
     def retrieve_spacecareers_jobs(self) -> list[Job]:
-        site = self._jobsites["space_careers"]
-        api = site.api
+        api = self._jobsites["space_careers"].api
 
         total_jobs = requests.get(api).json()["count"]
         api_request = f"{api}include_expired=false&limit={total_jobs}&offset=0"
