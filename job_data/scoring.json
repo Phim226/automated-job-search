@@ -38,6 +38,23 @@
             "huddersfield": 4
         },
 
+        "country": {
+            "uk": 5,
+            "united kingdom": 5,
+            "sweden": 1,
+            "ireland": -1,
+            "france": -3,
+            "germany": -2,
+            "netherlands": -1,
+            "denmark": -2,
+            "portugal": -3,
+            "spain": -3
+        },
+
+        "job_type": {
+            "remote": 5
+        },
+
         "description" : {
             "python": 6,
             "c++": 3,
