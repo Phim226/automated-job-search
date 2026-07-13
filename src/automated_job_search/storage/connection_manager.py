@@ -30,14 +30,16 @@ class ConnectionManager:
 
     def _connect(self) -> None:
         try:
-            self.cursor.execute(query)
-            return self.cursor.fetchall()
+            self.connection = sqlite3.connect(self.db)
+            self.cursor = self.connection.cursor()
+            print(f"Successfully connected to {self.db}")
 
         except sqlite3.Error as error:
-            print(f"Error occured during database query: {error}")
-            return []
+            print(f"Error occured during database connection: {error}")
+            self._close()
 
-    def close(self) -> None:
+
+    def _close(self) -> None:
         if self.connection:
                 self.cursor.close()
                 self.connection.close()
