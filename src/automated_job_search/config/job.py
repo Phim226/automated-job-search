@@ -6,12 +6,22 @@ class Job:
     company: str
     city: str
     country: str
-    description: str= ""
-    advert_url: str = ""
-    score: int = 0
+    score: int
 
     def __str__(self) -> str:
         return f"Job(Title = {self.title}, Company = {self.company}, Score = {self.score})"
+
+@dataclass
+class JobDetails(Job):
+    duration: str
+    deadline: str
+    rolling_deadline: bool
+    on_site_remote: str
+    description: str
+    application_url: str
+    advert_url: str
+
+
 
 @dataclass
 class Jobsite:
