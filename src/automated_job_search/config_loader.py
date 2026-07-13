@@ -35,10 +35,10 @@ class ConfigLoader:
 
     def load_space_careers_job(self, job_json: dict[str, Any], advert_url: str, description: str) -> Job:
         return Job(
-                title = job_json["title"],
-                company = job_json["employer"]["name"],
-                city = job_json["city"],
-                country = job_json["country_display"],
-                description = description,
+                title = job_json["title"].lower(),
+                company = job_json["employer"]["name"].lower(),
+                city = job_json["city"].lower(),
+                country = job_json["country_display"].lower(),
+                description = description.lower(),
                 advert_url = advert_url
             )
