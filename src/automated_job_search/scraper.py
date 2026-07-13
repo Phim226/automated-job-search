@@ -70,8 +70,9 @@ class Scraper:
 
     def apply_scoring(self, jobs_list: list[Job]):
         for job in jobs_list:
-            if job.country not in ["UK", "United Kingdom"]:
-                job.score -= 8
+            for country, score in self._config_loader.scoring["country"].items():
+                if country in job.country:
+                    job.score += score
 
             for title, score in self._config_loader.scoring["title"].items():
                 if title in job.title:
