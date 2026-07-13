@@ -1,0 +1,47 @@
+{
+        "title" : {
+            "flight dynamics": 10,
+            "astrodynamics": 10,
+            "orbital mechanics": 10,
+            "mathematics": 10,
+            "mathematical": 10,
+            "mathematician": 10,
+            "python": 9,
+            "simulation": 9,
+            "spacecraft dynamics": 8,
+            "mission analyst": 8,
+            "numerical": 7,
+            "modelling": 7,
+            "space": 6,
+            "software": 6,
+            "data analyst": 6,
+            "systems": 6,
+            "gnc": 5,
+            "intern": 5,
+            "graduate": 5,
+            "junior": 5,
+            "entry level": 5,
+            "trainee": 5,
+            "embedded": 3
+        },
+
+        "city" : {
+            "leeds" : 8,
+            "bradford": 6,
+            "harrogate": 6,
+            "york": 5,
+            "sheffield": 4,
+            "huddersfield": 4
+        },
+
+        "description" : {
+            "python": 6,
+            "c++": 3,
+            "scientific computing": 5,
+            "mathematics": 7,
+            "orbital mechanics": 8,
+            "linux": 4,
+            "git": 3,
+            "ci/cd": 2
+        }
+}

@@ -1,0 +1,8 @@
+[
+    {
+        "name": "Space careers",
+        "url": "https://spacecareers.uk/jobs/",
+        "api": "https://spacecareers.uk/api/jobs/?",
+        "scraper": "space_careers"
+    }
+]
