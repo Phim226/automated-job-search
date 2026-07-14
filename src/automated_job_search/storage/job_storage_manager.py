@@ -6,7 +6,7 @@ class JobStorageManager:
 
     JOB_SUMMARY: str = "job_summary"
     JOB_DETAILS: str = "job_details"
-    JOB_SITE: str = "job site"
+    JOB_SITE: str = "job_site"
 
     def __init__(self, connection_manager: ConnectionManager) -> None:
         self.cm = connection_manager
