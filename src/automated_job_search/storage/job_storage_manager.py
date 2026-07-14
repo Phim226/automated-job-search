@@ -26,9 +26,11 @@ class JobStorageManager:
         job_details_creation_query = f"""
             CREATE TABLE IF NOT EXISTS {self.JOB_DETAILS} (
                 job_id CHAR(50),
+                date_posted CHAR(50),
                 duration CHAR(50),
                 deadline CHAR(50),
                 rolling_deadline BOOL,
+                expired BOOL,
                 advert_url VARCHAR(1000),
                 application_url VARCHAR(1000),
                 description TEXT(5000),
