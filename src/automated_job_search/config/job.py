@@ -14,9 +14,11 @@ class Job:
 
 @dataclass
 class JobDetails(Job):
+    data_posted: str
     duration: str
     deadline: str
     rolling_deadline: bool
+    expired: bool
     on_site_remote: str
     description: str
     application_url: str
