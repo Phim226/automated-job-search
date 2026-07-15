@@ -86,7 +86,8 @@ class JobStorageManager:
     def drop_tables(self) -> list[Any]:
         drop_summary = f"DROP TABLE IF EXISTS {self.JOB_SUMMARY}"
         drop_details = f"DROP TABLE IF EXISTS {self.JOB_DETAILS}"
-        return self.con_manager.chain_query([drop_details, drop_summary])
+        drop_sites = f"DROP TABLE IF EXISTS {self.JOB_SITE}"
+        return self.con_manager.chain_query([drop_details, drop_summary, drop_sites])
 
     def insert_job_summary(self, jobs: list[Job]) -> list[Any]:
         queries: list[str] = []
