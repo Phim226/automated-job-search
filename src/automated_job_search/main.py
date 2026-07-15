@@ -56,22 +56,7 @@ class AutomatedJobSearch:
 
 if __name__ == "__main__":
     ajs = AutomatedJobSearch()
-    """ config_loader = ConfigLoader()
-    scraper = Scraper(config_loader)
 
-    cm = ConnectionManager(JOB_DATA_DIR/"job_database.db")
-    jsm = JobStorageManager(cm, config_loader)
-    jsm.reinitialise_tables()
-
-    jobs = config_loader.load_space_careers_job(scraper.get_jobs())
-    print(jobs)
-    #scraper.apply_scoring(spacecareers_jobs)
-
-    jsm.insert_job_summary(jobs)
-
-    top_jobs_db_records = jsm.select_top_scoring_job_summaries(10)
-
-    print(config_loader.load_job_from_db(top_jobs_db_records)) """
 
     """ url = "https://spacecareers.uk/api/jobs/cc0c6606-7a02-46b8-859a-1cd24332a4be/"
 
