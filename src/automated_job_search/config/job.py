@@ -10,9 +10,6 @@ class Job:
     job_site: str
     score: int
 
-    def __str__(self) -> str:
-        return f"Job(Title = {self.title}, Company = {self.company}, Score = {self.score})"
-
     def __iter__(self):
         return iter(tuple(getattr(self, field.name) for field in fields(self)))
 
