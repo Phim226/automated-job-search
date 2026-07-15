@@ -1,7 +1,6 @@
 from typing import Any
 from automated_job_search.storage.connection_manager import ConnectionManager
-from automated_job_search.config.config_loader import ConfigLoader
-from automated_job_search.config.job import Job
+from automated_job_search.config.job import Job, Jobsite
 
 class JobStorageManager:
 
@@ -9,9 +8,9 @@ class JobStorageManager:
     JOB_DETAILS: str = "job_details"
     JOB_SITE: str = "job_site"
 
-    def __init__(self, connection_manager: ConnectionManager, config_loader: ConfigLoader) -> None:
+    def __init__(self, connection_manager: ConnectionManager, job_sites: dict[str, Jobsite]) -> None:
         self.con_manager = connection_manager
-        self.config_loader = config_loader
+        self.job_sites = job_sites
 
     def initialise_tables(self) -> list[Any]:
         results = []
@@ -61,7 +60,7 @@ class JobStorageManager:
 
     def populate_job_sites(self):
         queries: list[str] = []
-        for site in self.config_loader.jobsites.values():
+        for site in self.job_sites.values():
             query = f"""
                 INSERT OR IGNORE INTO {self.JOB_SITE} (
                     name,
