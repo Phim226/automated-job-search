@@ -2,7 +2,7 @@ from automated_job_search.config.job import Job
 
 class JobFilter:
 
-    def __init__(self, scoring: dict[str, dict[str, int]], disqualifiers: dict[str, str]) -> None:
+    def __init__(self, scoring: dict[str, dict[str, int]], disqualifiers: dict[str, list[str]]) -> None:
         self.scoring = scoring
         self.disqualifiers = disqualifiers
 
