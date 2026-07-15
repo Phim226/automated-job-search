@@ -64,7 +64,7 @@ class Scraper:
 
         return filtered_list
 
-    def apply_scoring(self, jobs_list: list[Job]):
+    def apply_scoring(self, jobs_list: list[Job]) -> None:
         country_scores = self._config_loader.scoring["country"]
         city_scores = self._config_loader.scoring["city"]
         title_scores = self._config_loader.scoring["title"]
