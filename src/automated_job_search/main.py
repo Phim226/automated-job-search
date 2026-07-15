@@ -8,51 +8,52 @@ from automated_job_search.config.job import Jobsite
 from automated_job_search.filter.filter import JobFilter
 
 
+def load_sites() -> dict[str, Jobsite]:
+    with open(JOB_DATA_DIR/"job_sites.json", "r") as file:
+        jobsites_list =  json.load(file)
+
+    job_sites = dict()
+    for site in jobsites_list:
+        job_sites[site["scraper"]] = (Jobsite(**site))
+
+    return job_sites
+
+def load_filters() -> tuple[dict[str, dict[str, int]], dict[str, list[str]]]:
+    with open(JOB_DATA_DIR/"scoring.json") as file:
+        scoring: dict[str, dict[str, int]] = json.load(file)
+
+    with open(JOB_DATA_DIR/"disqualifiars.json") as file:
+        disqualifiars: dict[str, list[str]] = json.load(file)
+
+    return scoring, disqualifiars
+
+
 class AutomatedJobSearch:
 
     def __init__(self) -> None:
         config_loader = ConfigLoader()
 
-        job_sites = self._load_sites()
+        job_sites = load_sites()
         scraper = Scraper(job_sites)
 
         con_manager = ConnectionManager(JOB_DATA_DIR/"job_database.db")
         jsm = JobStorageManager(con_manager, job_sites)
         jsm.reinitialise_tables()
 
-        filter = JobFilter(*self._load_filters())
+        filter = JobFilter(*load_filters())
 
         jobs = config_loader.load_space_careers_job(scraper.get_jobs())
         filtered_jobs = filter.filter_jobs(jobs)
         filter.apply_scoring(filtered_jobs)
 
-        jsm.insert_job_summary(jobs)
+        jsm.insert_job_summary(filtered_jobs)
 
         top_jobs_db_records = jsm.select_top_scoring_job_summaries(10)
 
         print(config_loader.load_job_from_db(top_jobs_db_records))
 
-    @staticmethod
-    def _load_sites() -> dict[str, Jobsite]:
-        with open(JOB_DATA_DIR/"job_sites.json", "r") as file:
-            jobsites_list =  json.load(file)
-
-        job_sites = dict()
-        for site in jobsites_list:
-            job_sites[site["scraper"]] = (Jobsite(**site))
-
-        return job_sites
-
-    @staticmethod
-    def _load_filters() -> tuple[dict[str, dict[str, int]], dict[str, list[str]]]:
-        with open(JOB_DATA_DIR/"scoring.json") as file:
-            scoring: dict[str, dict[str, int]] = json.load(file)
-
-        with open(JOB_DATA_DIR/"disqualifiars.json") as file:
-            disqualifiars: dict[str, list[str]] = json.load(file)
-
-        return scoring, disqualifiars
-
+    def search(self) -> None:
+        pass
 
 if __name__ == "__main__":
     ajs = AutomatedJobSearch()
