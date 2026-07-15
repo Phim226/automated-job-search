@@ -78,8 +78,8 @@ class JobStorageManager:
         return self.con_manager.chain_query(queries)
 
     def reinitialise_tables(self) -> list[Any]:
-        self.drop_tables()
-        return self.initialise_tables()
+        drop_result = self.drop_tables()
+        return [self.initialise_tables(), drop_result]
 
     def drop_tables(self) -> list[Any]:
         drop_summary = f"DROP TABLE IF EXISTS {self.JOB_SUMMARY}"
