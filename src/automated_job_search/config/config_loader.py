@@ -13,7 +13,7 @@ class ConfigLoader:
         for site in jobsites:
             self._jobsites[site["scraper"]] = (Jobsite(**site))
 
-        with open(JOB_DATA_DIR/"disqualification.json") as file:
+        with open(JOB_DATA_DIR/"disqualifiars.json") as file:
             self._disqualifications: dict[str, list[str]] = json.load(file)
 
         with open(JOB_DATA_DIR/"scoring.json") as file:
