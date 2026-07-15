@@ -1,7 +1,40 @@
+import requests
+import json
+from typing import Any
 from automated_job_search.config.config_loader import ConfigLoader
 from automated_job_search.scraper.scraper import Scraper
 from automated_job_search.definitions import JOB_DATA_DIR
 from automated_job_search.storage import ConnectionManager, JobStorageManager
+from automated_job_search.config.job import Jobsite
+
+
+class AutomatedJobSearch:
+
+    def __init__(self) -> None:
+        jobsites = self._load_sites()
+        disqualifiars, scoring = self._load_filters()
+
+    @staticmethod
+    def _load_sites() -> dict[str, Jobsite]:
+        with open(JOB_DATA_DIR/"job_sites.json", "r") as file:
+            jobsites_list =  json.load(file)
+
+        jobsites = dict()
+        for site in jobsites_list:
+            jobsites[site["scraper"]] = (Jobsite(**site))
+
+        return jobsites
+
+    @staticmethod
+    def _load_filters() -> tuple[dict[str, list[str]], dict[str, dict[str, int]]]:
+        with open(JOB_DATA_DIR/"disqualifiars.json") as file:
+            disqualifiars: dict[str, list[str]] = json.load(file)
+
+        with open(JOB_DATA_DIR/"scoring.json") as file:
+            scoring: dict[str, dict[str, int]] = json.load(file)
+
+        return disqualifiars, scoring
+
 
 if __name__ == "__main__":
     config_loader = ConfigLoader()
