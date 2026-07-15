@@ -7,6 +7,7 @@ class Job:
     company: str
     city: str
     country: str
+    job_site: str
     score: int
 
     def __str__(self) -> str:
