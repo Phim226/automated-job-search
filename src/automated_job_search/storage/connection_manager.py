@@ -8,9 +8,11 @@ class ConnectionManager:
         self.db = database
 
     def chain_query(self, query_list: list[str]) ->list[Any]:
+        current_query = ""
         try:
             self._connect()
             for query in query_list:
+                current_query = query
                 self.cursor.execute(query)
                 self.connection.commit()
 
@@ -18,6 +20,7 @@ class ConnectionManager:
 
         except sqlite3.Error as error:
             print(f"Error occured during database query: {error}")
+            print(f"Query: {current_query}")
             result = []
 
         finally:
