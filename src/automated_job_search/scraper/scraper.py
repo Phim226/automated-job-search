@@ -5,9 +5,8 @@ from automated_job_search.config.config_loader import ConfigLoader
 
 class Scraper:
 
-    def __init__(self, config_loader: ConfigLoader) -> None:
-        self._config_loader = config_loader
-        self._jobsites = config_loader.jobsites
+    def __init__(self, job_sites: dict[str, Jobsite]) -> None:
+        self._jobsites = job_sites
 
     def get_jobs(self) -> list[dict[str, Any]]:
         jobs = []
