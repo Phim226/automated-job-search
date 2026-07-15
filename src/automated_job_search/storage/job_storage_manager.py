@@ -21,7 +21,8 @@ class JobStorageManager:
     def create_tables(self) -> list[Any]:
         job_site_creation_query = f"""
             CREATE TABLE IF NOT EXISTS {self.JOB_SITE} (
-                name CHAR(50) PRIMARY KEY,
+                site_id CHAR(50) PRIMARY KEY,
+                name CHAR(50),
                 url CHAR(50),
                 api VARCHAR(255)
             );
@@ -36,7 +37,7 @@ class JobStorageManager:
                 country CHAR(50),
                 job_site CHAR(50),
                 score INT,
-                FOREIGN KEY (job_site) REFERENCES {self.JOB_SITE}(name)
+                FOREIGN KEY (job_site) REFERENCES {self.JOB_SITE}(site_id)
             );
         """
 
@@ -53,7 +54,7 @@ class JobStorageManager:
                 application_url VARCHAR(1000),
                 description TEXT(5000),
                 FOREIGN KEY (job_id) REFERENCES {self.JOB_SUMMARY}(job_id),
-                FOREIGN KEY (job_site) REFERENCES {self.JOB_SITE}(name)
+                FOREIGN KEY (job_site) REFERENCES {self.JOB_SITE}(site_id)
             );
         """
         return self.con_manager.chain_query([job_site_creation_query, job_summary_creation_query, job_details_creation_query])
@@ -63,10 +64,12 @@ class JobStorageManager:
         for site in self.job_sites.values():
             query = f"""
                 INSERT OR IGNORE INTO {self.JOB_SITE} (
+                    site_id,
                     name,
                     url,
                     api
                 ) VALUES(
+                    '{site.scraper}',
                     '{site.name}',
                     '{site.url}',
                     '{site.api}'
