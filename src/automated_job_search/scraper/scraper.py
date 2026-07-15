@@ -9,12 +9,13 @@ class Scraper:
         self._config_loader = config_loader
         self._jobsites = config_loader.jobsites
 
-    def get_jobs(self) -> list[Job]:
-        spacecareers_jobs = self.retrieve_spacecareers_jobs()
-        filtered_jobs = self.filter_jobs(spacecareers_jobs)
-        return filtered_jobs
+    def get_jobs(self) -> list[dict[str, Any]]:
+        jobs = []
+        jobs += self.retrieve_spacecareers_jobs()
+        # filtered_jobs = self.filter_jobs(spacecareers_jobs)
+        return jobs
 
-    def retrieve_spacecareers_jobs(self) -> list[Job]:
+    def retrieve_spacecareers_jobs(self) -> list[dict[str, Any]]:
         api = self._jobsites["space_careers"].api
 
         total_jobs = requests.get(api).json()["count"]
@@ -26,19 +27,12 @@ class Scraper:
             print(f"Request to spacecareers.uk was not successful. Code {response.status_code}")
             return []
 
+        #advert_url = f"{self._jobsites["space_careers"].url}{job["id"]}"
         results: list[dict[str, Any]] = response.json()["results"]
+        for result in results:
+            result["job_site"] = self._jobsites["space_careers"].name
 
-        jobs_list: list[Job] = []
-
-        job_site = self._jobsites["space_careers"].name
-        for job in results:
-            if job["expired"]:
-                continue
-
-            #advert_url = f"{self._jobsites["space_careers"].url}{job["id"]}"
-            jobs_list.append(self._config_loader.load_space_careers_job(job, job_site))
-
-        return jobs_list
+        return results
 
     def _get_space_careers_job_details(self, job_id: str) -> dict[str, Any]:
         api = self._jobsites["space_careers"].api
