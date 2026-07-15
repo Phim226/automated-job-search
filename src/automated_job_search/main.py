@@ -8,8 +8,8 @@ if __name__ == "__main__":
     scraper = Scraper(config_loader)
 
     cm = ConnectionManager(JOB_DATA_DIR/"job_database.db")
-    jsm = JobStorageManager(cm)
-    jsm.initialise_tables()
+    jsm = JobStorageManager(cm, config_loader)
+    jsm.reinitialise_tables()
 
     spacecareers_jobs = scraper.get_jobs()
     scraper.apply_scoring(spacecareers_jobs)
