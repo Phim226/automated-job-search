@@ -34,7 +34,7 @@ class Scraper:
 
         return results
 
-    def _get_space_careers_job_details(self, job_id: str) -> dict[str, Any]:
+    def get_space_careers_job_details(self, job_id: str) -> dict[str, Any]:
         api = self._jobsites["space_careers"].api
         url = f"{api}{job_id}/"
 
