@@ -11,7 +11,16 @@ if __name__ == "__main__":
     jsm = JobStorageManager(cm, config_loader)
     jsm.reinitialise_tables()
 
-    spacecareers_jobs = config_loader.load_space_careers_job(scraper.get_jobs())
+    jobs = config_loader.load_space_careers_job(scraper.get_jobs())
     #scraper.apply_scoring(spacecareers_jobs)
 
-    jsm.insert_job_summary(spacecareers_jobs)
+    jsm.insert_job_summary(jobs)
+
+    top_jobs_db_records = jsm.select_top_scoring_job_summaries(10)
+
+    print(config_loader.load_job_from_db(top_jobs_db_records))
+
+    """ url = "https://spacecareers.uk/api/jobs/cc0c6606-7a02-46b8-859a-1cd24332a4be/"
+
+    response = requests.get(url)
+    print(response.json()) """
