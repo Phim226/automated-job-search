@@ -1,8 +1,8 @@
 {
         "title" : {
-            "flight dynamics": 10,
-            "astrodynamics": 10,
-            "orbital mechanics": 10,
+            "flight dynamics": 20,
+            "astrodynamics": 15,
+            "orbital mechanics": 15,
             "mathematics": 10,
             "mathematical": 10,
             "mathematician": 10,
@@ -22,9 +22,9 @@
             "junior": 6,
             "entry level": 6,
             "trainee": 6,
-            "gnc": 4,
             "systems": 3,
-            "embedded": 3
+            "gnc": 3,
+            "embedded": -3
         },
 
         "employer": {
@@ -70,7 +70,10 @@
             "git": 3,
             "ci/cd": 2,
             "+3 years": -5,
+            "3 or more years": -5,
             "+5 years": -10,
-            "+10 years": -10
+            "5 or more years": -10,
+            "+10 years": -10,
+            "10 or more years": -10
         }
 }
