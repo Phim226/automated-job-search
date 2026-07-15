@@ -1,5 +1,6 @@
 from typing import Any
 from automated_job_search.storage.connection_manager import ConnectionManager
+from automated_job_search.config.config_loader import ConfigLoader
 from automated_job_search.config.job import Job
 
 class JobStorageManager:
@@ -8,8 +9,9 @@ class JobStorageManager:
     JOB_DETAILS: str = "job_details"
     JOB_SITE: str = "job_site"
 
-    def __init__(self, connection_manager: ConnectionManager) -> None:
-        self.cm = connection_manager
+    def __init__(self, connection_manager: ConnectionManager, config_loader: ConfigLoader) -> None:
+        self.con_manager = connection_manager
+        self.config_loader = config_loader
 
     def initialise_tables(self) -> list[Any]:
         job_summary_creation_query = f"""
