@@ -1,43 +1,62 @@
 import requests
 import json
-from typing import Any
 from automated_job_search.config.config_loader import ConfigLoader
 from automated_job_search.scraper.scraper import Scraper
 from automated_job_search.definitions import JOB_DATA_DIR
 from automated_job_search.storage import ConnectionManager, JobStorageManager
 from automated_job_search.config.job import Jobsite
+from automated_job_search.filter.filter import JobFilter
 
 
 class AutomatedJobSearch:
 
     def __init__(self) -> None:
-        jobsites = self._load_sites()
-        disqualifiars, scoring = self._load_filters()
+        config_loader = ConfigLoader()
+
+        job_sites = self._load_sites()
+        scraper = Scraper(job_sites)
+
+        con_manager = ConnectionManager(JOB_DATA_DIR/"job_database.db")
+        jsm = JobStorageManager(con_manager, job_sites)
+        jsm.reinitialise_tables()
+
+        filter = JobFilter(*self._load_filters())
+
+        jobs = config_loader.load_space_careers_job(scraper.get_jobs())
+        filtered_jobs = filter.filter_jobs(jobs)
+        filter.apply_scoring(filtered_jobs)
+
+        jsm.insert_job_summary(jobs)
+
+        top_jobs_db_records = jsm.select_top_scoring_job_summaries(10)
+
+        print(config_loader.load_job_from_db(top_jobs_db_records))
 
     @staticmethod
     def _load_sites() -> dict[str, Jobsite]:
         with open(JOB_DATA_DIR/"job_sites.json", "r") as file:
             jobsites_list =  json.load(file)
 
-        jobsites = dict()
+        job_sites = dict()
         for site in jobsites_list:
-            jobsites[site["scraper"]] = (Jobsite(**site))
+            job_sites[site["scraper"]] = (Jobsite(**site))
 
-        return jobsites
+        return job_sites
 
     @staticmethod
-    def _load_filters() -> tuple[dict[str, list[str]], dict[str, dict[str, int]]]:
-        with open(JOB_DATA_DIR/"disqualifiars.json") as file:
-            disqualifiars: dict[str, list[str]] = json.load(file)
-
+    def _load_filters() -> tuple[dict[str, dict[str, int]], dict[str, list[str]]]:
         with open(JOB_DATA_DIR/"scoring.json") as file:
             scoring: dict[str, dict[str, int]] = json.load(file)
 
-        return disqualifiars, scoring
+        with open(JOB_DATA_DIR/"disqualifiars.json") as file:
+            disqualifiars: dict[str, list[str]] = json.load(file)
+
+        return scoring, disqualifiars
 
 
 if __name__ == "__main__":
-    config_loader = ConfigLoader()
+    ajs = AutomatedJobSearch()
+    """ config_loader = ConfigLoader()
     scraper = Scraper(config_loader)
 
     cm = ConnectionManager(JOB_DATA_DIR/"job_database.db")
@@ -45,13 +64,14 @@ if __name__ == "__main__":
     jsm.reinitialise_tables()
 
     jobs = config_loader.load_space_careers_job(scraper.get_jobs())
+    print(jobs)
     #scraper.apply_scoring(spacecareers_jobs)
 
     jsm.insert_job_summary(jobs)
 
     top_jobs_db_records = jsm.select_top_scoring_job_summaries(10)
 
-    print(config_loader.load_job_from_db(top_jobs_db_records))
+    print(config_loader.load_job_from_db(top_jobs_db_records)) """
 
     """ url = "https://spacecareers.uk/api/jobs/cc0c6606-7a02-46b8-859a-1cd24332a4be/"
 
