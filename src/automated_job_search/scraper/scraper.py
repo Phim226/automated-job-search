@@ -1,7 +1,6 @@
 import requests
 from typing import Any
-from automated_job_search.config.job import Job
-from automated_job_search.config.config_loader import ConfigLoader
+from automated_job_search.config.job import Jobsite
 
 class Scraper:
 
@@ -39,40 +38,3 @@ class Scraper:
 
         response = requests.get(url)
         return response.json()
-
-    def filter_jobs(self, jobs_list: list[Job]) -> list[Job]:
-        filtered_list = []
-        job_disqualified = False
-        for job in jobs_list:
-            for title_disqualifer in self._config_loader.disqualifications["title"]:
-                if title_disqualifer in job.title:
-                    job_disqualified = True
-                    break
-
-            if job_disqualified:
-                job_disqualified = False
-                continue
-
-            filtered_list.append(job)
-
-        return filtered_list
-
-    def apply_scoring(self, jobs_list: list[Job]) -> None:
-        country_scores = self._config_loader.scoring["country"]
-        city_scores = self._config_loader.scoring["city"]
-        title_scores = self._config_loader.scoring["title"]
-
-        for job in jobs_list:
-            for country, score in country_scores.items():
-                if country in job.country:
-                    job.score += score
-
-            for city, score in city_scores.items():
-                if city in job.city:
-                    job.score += score
-
-            for title, score in title_scores.items():
-                if title in job.title:
-                    job.score += score
-
-
