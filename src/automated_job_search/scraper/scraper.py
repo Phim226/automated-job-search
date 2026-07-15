@@ -30,12 +30,13 @@ class Scraper:
 
         jobs_list: list[Job] = []
 
+        job_site = self._jobsites["space_careers"].name
         for job in results:
             if job["expired"]:
                 continue
 
             #advert_url = f"{self._jobsites["space_careers"].url}{job["id"]}"
-            jobs_list.append(self._config_loader.load_space_careers_job(job))
+            jobs_list.append(self._config_loader.load_space_careers_job(job, job_site))
 
         return jobs_list
 
