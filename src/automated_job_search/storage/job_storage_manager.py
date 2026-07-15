@@ -110,4 +110,10 @@ class JobStorageManager:
             """
             queries.append(query)
 
-        return self.cm.chain_query(queries)
+        return self.con_manager.chain_query(queries)
+
+    def select_top_scoring_job_summaries(self, minimum_score: int) -> list[Job]:
+        query = f"""
+            SELECT * FROM {self.JOB_SUMMARY} WHERE score >= {minimum_score} ORDER BY score DESC;
+        """
+        return self.con_manager.query(query)
