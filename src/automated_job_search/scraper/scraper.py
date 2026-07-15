@@ -28,7 +28,7 @@ class Scraper:
         #advert_url = f"{self._jobsites["space_careers"].url}{job["id"]}"
         results: list[dict[str, Any]] = response.json()["results"]
         for result in results:
-            result["job_site"] = self._jobsites["space_careers"].name
+            result["job_site"] = self._jobsites["space_careers"].scraper
 
         return results
 
