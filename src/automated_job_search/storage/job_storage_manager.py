@@ -89,21 +89,25 @@ class JobStorageManager:
     def insert_job_summary(self, jobs: list[Job]) -> list[Any]:
         queries: list[str] = []
         for job in jobs:
-            query = f"""INSERT OR IGNORE INTO {self.JOB_SUMMARY} (
-                            job_id,
-                            title,
-                            company,
-                            city,
-                            country,
-                            score
-                        ) VALUES(
-                            '{job.job_id}',
-                            '{job.title}',
-                            '{job.company}',
-                            '{job.city}',
-                            '{job.country}',
-                            {job.score}
-                    )"""
+            query = f"""
+                INSERT OR IGNORE INTO {self.JOB_SUMMARY} (
+                    job_id,
+                    title,
+                    company,
+                    city,
+                    country,
+                    job_site,
+                    score
+                ) VALUES(
+                    '{job.job_id}',
+                    '{job.title}',
+                    '{job.company}',
+                    '{job.city}',
+                    '{job.country}',
+                    '{job.job_site}',
+                    {job.score}
+                )
+            """
             queries.append(query)
 
         return self.cm.chain_query(queries)
