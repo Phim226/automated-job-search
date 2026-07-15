@@ -11,7 +11,7 @@ if __name__ == "__main__":
     jsm = JobStorageManager(cm, config_loader)
     jsm.reinitialise_tables()
 
-    spacecareers_jobs = scraper.get_jobs()
-    scraper.apply_scoring(spacecareers_jobs)
+    spacecareers_jobs = config_loader.load_space_careers_job(scraper.get_jobs())
+    #scraper.apply_scoring(spacecareers_jobs)
 
     jsm.insert_job_summary(spacecareers_jobs)
