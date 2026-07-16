@@ -34,11 +34,15 @@ class ConfigLoader:
         job_details = []
 
         for job_summary, details in job_info_pair:
-            duration: str | None = details["duration"]
+            duration: dict[Any, Any] | str | None = details["duration"]
             if duration is not None and isinstance(duration, dict):
+                duration = ""
                 for key, val in details["duration"].items():
-                    if val:
+                    if key == "permanent":
                         duration = key
+                        break
+                    else:
+                        duration += f"{f"{val} {key}" if val != 0 else ""}"
 
             job_details.append(
                 JobDetails(
