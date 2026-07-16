@@ -16,8 +16,13 @@ class Scraper:
     def retrieve_spacecareers_jobs(self) -> list[dict[str, Any]]:
         api = self._jobsites["space_careers"].api
 
-        total_jobs = requests.get(api).json()["count"]
-        api_request = f"{api}include_expired=false&limit={total_jobs}&offset=0"
+        response = requests.get(api)
+        if not response.ok:
+            print(f"Request to spacecareers.uk was not successful. Code {response.status_code}")
+            return []
+
+        total_jobs = response.json()["count"]
+        api_request = f"{api}?include_expired=false&limit={total_jobs}&offset=0"
 
         response = requests.get(api_request)
 
