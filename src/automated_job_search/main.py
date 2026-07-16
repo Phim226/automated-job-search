@@ -30,9 +30,8 @@ def load_filters() -> tuple[dict[str, dict[str, int]], dict[str, list[str]]]:
 class AutomatedJobSearch:
 
     def __init__(self) -> None:
-        config_loader = ConfigLoader()
-
         job_sites = load_sites()
+        config_loader = ConfigLoader(job_sites)
         scraper = Scraper(job_sites)
 
         con_manager = ConnectionManager(JOB_DATA_DIR/"job_database.db")
