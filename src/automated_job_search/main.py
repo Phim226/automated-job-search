@@ -1,4 +1,3 @@
-import requests
 import json
 from automated_job_search.config.config_loader import ConfigLoader
 from automated_job_search.scraper.scraper import Scraper
@@ -57,9 +56,3 @@ class AutomatedJobSearch:
 
 if __name__ == "__main__":
     ajs = AutomatedJobSearch()
-
-
-    """ url = "https://spacecareers.uk/api/jobs/cc0c6606-7a02-46b8-859a-1cd24332a4be/"
-
-    response = requests.get(url)
-    print(response.json()) """
