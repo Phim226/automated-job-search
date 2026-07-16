@@ -47,8 +47,16 @@ class AutomatedJobSearch:
         jsm.insert_job_summary(filtered_jobs)
 
         top_jobs_db_records = jsm.select_top_scoring_job_summaries(10)
+        top_jobs = config_loader.load_job_from_db(top_jobs_db_records)
 
-        print(config_loader.load_job_from_db(top_jobs_db_records))
+        first_top_jobs = top_jobs[:1]
+        # print(first_top_jobs)
+        job_detail_pair = list(zip(first_top_jobs, scraper.retrieve_spacecareers_job_details(first_top_jobs)))
+        # print(job_detail_pair)
+
+        job_detail = config_loader.load_space_careers_job_details(job_detail_pair)
+        print(job_detail)
+        jsm.insert_job_details(job_detail)
 
     def search(self) -> None:
         pass
