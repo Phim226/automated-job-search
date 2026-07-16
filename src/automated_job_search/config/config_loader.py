@@ -32,19 +32,28 @@ class ConfigLoader:
 
     def load_space_careers_job_details(self, job_info_pair: list[tuple[Job, dict[str, Any]]]) -> list[JobDetails]:
         job_details = []
+
         for job_summary, details in job_info_pair:
+            duration: str | None = details["duration"]
+            if duration is not None and isinstance(duration, dict):
+                for key, val in details["duration"].items():
+                    if val:
+                        duration = key
+
             job_details.append(
                 JobDetails(
                     *job_summary,
-                    data_posted= "",
-                    duration = "",
-                    deadline = "",
-                    rolling_deadline = True,
-                    expired = False,
-                    on_site_remote = "",
-                    description = "",
-                    application_url = "",
-                    advert_url = ""
+                    data_posted= details["posted_date"],
+                    duration = duration,
+                    deadline = details["application_deadline"],
+                    rolling_deadline = details["rolling_deadline"],
+                    salary_range_lower = details["salary_range_lower"],
+                    salary_range_upper = details["salary_range_upper"],
+                    expired = details["expired"],
+                    on_site_remote = details["on_site_remote"].lower(),
+                    description = details["description"],
+                    application_url = details["link_to_application_form"],
+                    advert_url = f"{self._job_sites["space_careers"].url}{job_summary.job_id}"
                 )
             )
 
