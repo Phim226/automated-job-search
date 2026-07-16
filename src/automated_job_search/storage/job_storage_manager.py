@@ -152,7 +152,7 @@ class JobStorageManager:
                     {details.expired},
                     '{details.advert_url}',
                     '{details.application_url}',
-                    '{details.description}'
+                    '{details.description.replace("'", "''")}'
                 );
             """
             queries.append(query)
