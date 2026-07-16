@@ -19,6 +19,8 @@ class JobDetails(Job):
     duration: str | None
     deadline: str | None
     rolling_deadline: bool
+    salary_range_lower: str | None
+    salary_range_upper: str | None
     expired: bool
     on_site_remote: str
     description: str

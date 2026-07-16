@@ -49,6 +49,8 @@ class JobStorageManager:
                 duration CHAR(50),
                 deadline CHAR(50),
                 rolling_deadline BOOL,
+                salary_range_lower CHAR(50),
+                salary_range_upper CHAR(50),
                 expired BOOL,
                 advert_url VARCHAR(1000),
                 application_url VARCHAR(1000),
@@ -73,7 +75,7 @@ class JobStorageManager:
                     '{site.name}',
                     '{site.url}',
                     '{site.api}'
-                )
+                );
             """
             queries.append(query)
 
@@ -109,7 +111,7 @@ class JobStorageManager:
                     '{job.country}',
                     '{job.job_site}',
                     {job.score}
-                )
+                );
             """
             queries.append(query)
 
