@@ -44,11 +44,13 @@ class JobStorageManager:
         job_details_creation_query = f"""
             CREATE TABLE IF NOT EXISTS {self.JOB_DETAILS} (
                 job_id CHAR(50) PRIMARY KEY,
+                title CHAR(50),
                 job_site CHAR(50),
                 date_posted CHAR(50),
                 duration CHAR(50),
                 deadline CHAR(50),
                 rolling_deadline BOOL,
+                on_site_remote CHAR(50),
                 salary_range_lower CHAR(50),
                 salary_range_upper CHAR(50),
                 expired BOOL,
@@ -129,11 +131,13 @@ class JobStorageManager:
             query = f"""
                 INSERT OR IGNORE INTO {self.JOB_DETAILS} (
                     job_id,
+                    title,
                     job_site,
                     date_posted,
                     duration,
                     deadline,
                     rolling_deadline,
+                    on_site_remote,
                     salary_range_lower,
                     salary_range_upper,
                     expired,
@@ -142,11 +146,13 @@ class JobStorageManager:
                     description
                 ) VALUES(
                     '{details.job_id}',
+                    '{details.title}',
                     '{details.job_site}',
                     '{details.data_posted}',
                     {f"'{details.duration}'" if details.duration else "NULL"},
                     {f"'{details.deadline}'" if details.deadline else "NULL"},
                     {details.rolling_deadline},
+                    {f"'{details.on_site_remote}'" if details.on_site_remote else "NULL"},
                     {f"'{details.salary_range_lower}'" if details.salary_range_lower else "NULL"},
                     {f"'{details.salary_range_upper}'" if details.salary_range_upper else "NULL"},
                     {details.expired},
