@@ -22,7 +22,7 @@ class JobDetails(Job):
     salary_range_lower: str | None
     salary_range_upper: str | None
     expired: bool
-    on_site_remote: str
+    on_site_remote: str | None
     description: str
     application_url: str
     advert_url: str
