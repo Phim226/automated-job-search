@@ -34,6 +34,10 @@ class ConfigLoader:
         job_details = []
 
         for job_summary, details in job_info_pair:
+
+            # In the space careers details dictionary the duration field is either None, {permanent: True} or
+            # {years: num_years, months: num_months, weeks: num_weeks}. This block parses those possibilities
+            # into a string
             duration: dict[Any, Any] | str | None = details["duration"]
             if duration is not None and isinstance(duration, dict):
                 duration = ""
@@ -54,7 +58,7 @@ class ConfigLoader:
                     salary_range_lower = details["salary_range_lower"],
                     salary_range_upper = details["salary_range_upper"],
                     expired = details["expired"],
-                    on_site_remote = details["on_site_remote"].lower() if details["on_site_remote"] else None,
+                    on_site_remote = details["on_site_remote"].lower() if details["on_site_remote"] else None, # Space careers jobs sometimes don't have entries for the on_site_remote field
                     description = details["description"],
                     application_url = details["link_to_application_form"],
                     advert_url = f"{self._job_sites["space_careers"].url}{job_summary.job_id}"
