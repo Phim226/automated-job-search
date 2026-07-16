@@ -1,6 +1,6 @@
 from typing import Any
 from automated_job_search.storage.connection_manager import ConnectionManager
-from automated_job_search.config.job import Job, Jobsite
+from automated_job_search.config.job import Job, Jobsite, JobDetails
 
 class JobStorageManager:
 
@@ -122,3 +122,39 @@ class JobStorageManager:
             SELECT * FROM {self.JOB_SUMMARY} WHERE score >= {minimum_score} ORDER BY score DESC;
         """
         return self.con_manager.query(query)
+
+    def insert_job_details(self, job_details: list[JobDetails]) -> list[Any]:
+        queries: list[str] = []
+        for details in job_details:
+            query = f"""
+                INSERT OR IGNORE INTO {self.JOB_DETAILS} (
+                    job_id,
+                    job_site,
+                    date_posted,
+                    duration,
+                    deadline,
+                    rolling_deadline,
+                    salary_range_lower,
+                    salary_range_upper,
+                    expired,
+                    advert_url,
+                    application_url,
+                    description
+                ) VALUES(
+                    '{details.job_id}',
+                    '{details.job_site}',
+                    '{details.data_posted}',
+                    {f"'{details.duration}'" if details.duration else "NULL"},
+                    {f"'{details.deadline}'" if details.deadline else "NULL"},
+                    {details.rolling_deadline},
+                    {f"'{details.salary_range_lower}'" if details.salary_range_lower else "NULL"},
+                    {f"'{details.salary_range_upper}'" if details.salary_range_upper else "NULL"},
+                    {details.expired},
+                    '{details.advert_url}',
+                    '{details.application_url}',
+                    '{details.description}'
+                );
+            """
+            queries.append(query)
+
+        return self.con_manager.chain_query(queries)
