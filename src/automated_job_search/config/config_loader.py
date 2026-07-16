@@ -54,7 +54,7 @@ class ConfigLoader:
                     salary_range_lower = details["salary_range_lower"],
                     salary_range_upper = details["salary_range_upper"],
                     expired = details["expired"],
-                    on_site_remote = details["on_site_remote"].lower(),
+                    on_site_remote = details["on_site_remote"].lower() if details["on_site_remote"] else None,
                     description = details["description"],
                     application_url = details["link_to_application_form"],
                     advert_url = f"{self._job_sites["space_careers"].url}{job_summary.job_id}"
