@@ -20,6 +20,7 @@ class ConnectionManager:
             result = self.cursor.fetchall()
 
         except sqlite3.Error:
+            self.connection.rollback()
             print(f"Query: {current_query}")
             raise
 
