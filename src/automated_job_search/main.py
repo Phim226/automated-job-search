@@ -1,6 +1,7 @@
 import json
 import requests
 import sys
+import sqlite3
 from automated_job_search.config.config_loader import ConfigLoader
 from automated_job_search.scraper.scraper import Scraper
 from automated_job_search.definitions import JOB_DATA_DIR
@@ -39,25 +40,32 @@ class AutomatedJobSearch:
         self.jsm.reinitialise_tables()
 
         try:
+            self.con_manager.query("SELECT * FROM test")
             jobs_dicts = self.scraper.get_jobs()
+
+            jobs = self.config_loader.load_space_careers_job(jobs_dicts)
+            filtered_jobs = self.filter.filter_jobs(jobs)
+            self.filter.apply_scoring(filtered_jobs)
+
+            self.jsm.save_job_summary(filtered_jobs)
+
+            top_jobs_db_records = self.jsm.select_top_scoring_job_summaries(10)
+            top_jobs = self.config_loader.load_job_from_db(top_jobs_db_records)
+
+            job_detail_pair = list(zip(top_jobs, self.scraper.retrieve_spacecareers_job_details(top_jobs)))
+
+            job_details = self.config_loader.load_space_careers_job_details(job_detail_pair)
+            self.jsm.save_job_details(job_details)
 
         except requests.RequestException as error:
             print(f"Job retrieval failed: {error}")
             sys.exit(1)
 
-        jobs = self.config_loader.load_space_careers_job(jobs_dicts)
-        filtered_jobs = self.filter.filter_jobs(jobs)
-        self.filter.apply_scoring(filtered_jobs)
+        except sqlite3.Error as error:
+            print(f"Database query failed: {error}")
+            sys.exit(1)
 
-        self.jsm.save_job_summary(filtered_jobs)
 
-        top_jobs_db_records = self.jsm.select_top_scoring_job_summaries(10)
-        top_jobs = self.config_loader.load_job_from_db(top_jobs_db_records)
-
-        job_detail_pair = list(zip(top_jobs, self.scraper.retrieve_spacecareers_job_details(top_jobs)))
-
-        job_details = self.config_loader.load_space_careers_job_details(job_detail_pair)
-        self.jsm.save_job_details(job_details)
 
     def _initialise_all_objects(self):
         self.scraper = Scraper(self.job_sites)
