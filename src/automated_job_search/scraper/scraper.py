@@ -17,11 +17,11 @@ class Scraper:
 
         response = requests.get(api, timeout = 60)
         response.raise_for_status()
-
         total_jobs = response.json()["count"]
-        api_request = f"{api}?include_expired=false&limit={total_jobs}&offset=0"
 
-        response = requests.get(api_request, timeout = 60)
+        response = requests.get(
+            api, timeout = 60, params = {"include_expired": "false", "limit": total_jobs, "offset": 0}
+        )
         response.raise_for_status()
 
         results: list[dict[str, Any]] = response.json()["results"]
