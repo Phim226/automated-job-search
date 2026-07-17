@@ -37,7 +37,7 @@ class AutomatedJobSearch:
         self._initialise_all_objects()
 
         try:
-            # TODO: Reinitialisation should be removed eventually. Tables should persis and be checked for new expirations to keep data valid
+            # TODO: Reinitialisation should be removed eventually. Tables should persist and be checked for new expirations to keep data valid
             self.jsm.reinitialise_tables()
 
             jobs_dicts = self.scraper.get_jobs()
