@@ -33,13 +33,8 @@ class ConnectionManager:
         return self.chain_query([query])
 
     def _connect(self) -> None:
-        try:
-            self.connection = sqlite3.connect(self.db)
-            self.cursor = self.connection.cursor()
-
-        except sqlite3.Error as error:
-            print(f"Error occured during database connection: {error}")
-            self._close()
+        self.connection = sqlite3.connect(self.db)
+        self.cursor = self.connection.cursor()
 
 
     def _close(self) -> None:
