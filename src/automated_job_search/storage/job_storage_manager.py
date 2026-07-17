@@ -12,11 +12,9 @@ class JobStorageManager:
         self.con_manager = connection_manager
         self.job_sites = job_sites
 
-    def initialise_tables(self) -> list[Any]:
-        results = []
-        results.append(self.create_tables())
-        results.append(self.populate_job_sites())
-        return results
+    def initialise_tables(self) -> None:
+        self.create_tables()
+        self.populate_job_sites()
 
     def create_tables(self) -> list[Any]:
         job_site_creation_query = f"""
@@ -83,15 +81,15 @@ class JobStorageManager:
 
         return self.con_manager.chain_query(queries)
 
-    def reinitialise_tables(self) -> list[Any]:
-        drop_result = self.drop_tables()
-        return [self.initialise_tables(), drop_result]
+    def reinitialise_tables(self) -> None:
+        self.drop_tables()
+        self.initialise_tables()
 
-    def drop_tables(self) -> list[Any]:
+    def drop_tables(self) -> None:
         drop_summary = f"DROP TABLE IF EXISTS {self.JOB_SUMMARY}"
         drop_details = f"DROP TABLE IF EXISTS {self.JOB_DETAILS}"
         drop_sites = f"DROP TABLE IF EXISTS {self.JOB_SITE}"
-        return self.con_manager.chain_query([drop_details, drop_summary, drop_sites])
+        self.con_manager.chain_query([drop_details, drop_summary, drop_sites])
 
     def save_job_summary(self, jobs: list[Job]) -> list[Any]:
         queries: list[str] = []
