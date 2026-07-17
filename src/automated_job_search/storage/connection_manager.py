@@ -35,7 +35,6 @@ class ConnectionManager:
         try:
             self.connection = sqlite3.connect(self.db)
             self.cursor = self.connection.cursor()
-            print(f"Successfully connected to {self.db}")
 
         except sqlite3.Error as error:
             print(f"Error occured during database connection: {error}")
@@ -46,4 +45,3 @@ class ConnectionManager:
         if self.connection:
                 self.cursor.close()
                 self.connection.close()
-                print(f"Connection to {self.db} closed")
