@@ -38,6 +38,8 @@ class ConnectionManager:
 
 
     def _close(self) -> None:
-        if self.connection:
-                self.cursor.close()
-                self.connection.close()
+        if hasattr(self, "cursor"):
+            self.cursor.close()
+
+        if hasattr(self, "connection"):
+            self.connection.close()
