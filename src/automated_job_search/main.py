@@ -20,14 +20,17 @@ def load_sites() -> dict[str, Jobsite]:
 
     return job_sites
 
-def load_filters() -> tuple[dict[str, dict[str, int]], dict[str, list[str]]]:
+def load_scoring() -> dict[str, dict[str, int]]:
     with open(JOB_DATA_DIR/"scoring.json") as file:
         scoring: dict[str, dict[str, int]] = json.load(file)
 
+    return scoring
+
+def load_disqualifiers() -> dict[str, list[str]]:
     with open(JOB_DATA_DIR/"disqualifiars.json") as file:
         disqualifiars: dict[str, list[str]] = json.load(file)
 
-    return scoring, disqualifiars
+    return disqualifiars
 
 
 class AutomatedJobSearch:
@@ -75,7 +78,8 @@ class AutomatedJobSearch:
 
     def _load_json_data(self) -> None:
         self.job_sites = load_sites()
-        self.scoring, self.disqualifiers = load_filters()
+        self.scoring = load_scoring()
+        self.disqualifiers = load_disqualifiers()
 
 
 if __name__ == "__main__":
