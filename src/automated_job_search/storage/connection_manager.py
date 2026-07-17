@@ -14,7 +14,8 @@ class ConnectionManager:
             for query in query_list:
                 current_query = query
                 self.cursor.execute(query)
-                self.connection.commit()
+
+            self.connection.commit()
 
             result = self.cursor.fetchall()
 
