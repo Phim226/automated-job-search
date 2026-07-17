@@ -10,7 +10,6 @@ class Scraper:
     def get_jobs(self) -> list[dict[str, Any]]:
         jobs = []
         jobs += self.retrieve_spacecareers_jobs()
-        # filtered_jobs = self.filter_jobs(spacecareers_jobs)
         return jobs
 
     def retrieve_spacecareers_jobs(self) -> list[dict[str, Any]]:
