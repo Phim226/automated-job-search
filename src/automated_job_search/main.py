@@ -36,11 +36,10 @@ class AutomatedJobSearch:
         self._load_json_data()
         self._initialise_all_objects()
 
-        # TODO: Reinitialisation should be removed eventually. Tables should persis and be checked for new expirations to keep data valid
-        self.jsm.reinitialise_tables()
-
         try:
-            self.con_manager.query("SELECT * FROM test")
+            # TODO: Reinitialisation should be removed eventually. Tables should persis and be checked for new expirations to keep data valid
+            self.jsm.reinitialise_tables()
+
             jobs_dicts = self.scraper.get_jobs()
 
             jobs = self.config_loader.load_space_careers_job(jobs_dicts)
