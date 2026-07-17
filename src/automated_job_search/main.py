@@ -49,7 +49,7 @@ class AutomatedJobSearch:
         filtered_jobs = self.filter.filter_jobs(jobs)
         self.filter.apply_scoring(filtered_jobs)
 
-        self.jsm.insert_job_summary(filtered_jobs)
+        self.jsm.save_job_summary(filtered_jobs)
 
         top_jobs_db_records = self.jsm.select_top_scoring_job_summaries(10)
         top_jobs = self.config_loader.load_job_from_db(top_jobs_db_records)
@@ -57,7 +57,7 @@ class AutomatedJobSearch:
         job_detail_pair = list(zip(top_jobs, self.scraper.retrieve_spacecareers_job_details(top_jobs)))
 
         job_details = self.config_loader.load_space_careers_job_details(job_detail_pair)
-        self.jsm.insert_job_details(job_details)
+        self.jsm.save_job_details(job_details)
 
     def _initialise_all_objects(self):
         self.scraper = Scraper(self.job_sites)

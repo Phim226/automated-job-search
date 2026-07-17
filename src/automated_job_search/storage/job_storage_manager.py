@@ -93,7 +93,7 @@ class JobStorageManager:
         drop_sites = f"DROP TABLE IF EXISTS {self.JOB_SITE}"
         return self.con_manager.chain_query([drop_details, drop_summary, drop_sites])
 
-    def insert_job_summary(self, jobs: list[Job]) -> list[Any]:
+    def save_job_summary(self, jobs: list[Job]) -> list[Any]:
         queries: list[str] = []
         for job in jobs:
             query = f"""
@@ -125,7 +125,7 @@ class JobStorageManager:
         """
         return self.con_manager.query(query)
 
-    def insert_job_details(self, job_details: list[JobDetails]) -> list[Any]:
+    def save_job_details(self, job_details: list[JobDetails]) -> list[Any]:
         queries: list[str] = []
         for details in job_details:
             query = f"""
