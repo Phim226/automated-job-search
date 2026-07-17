@@ -19,10 +19,9 @@ class ConnectionManager:
 
             result = self.cursor.fetchall()
 
-        except sqlite3.Error as error:
-            print(f"Error occured during database query: {error}")
+        except sqlite3.Error:
             print(f"Query: {current_query}")
-            result = []
+            raise
 
         finally:
             self._close()
