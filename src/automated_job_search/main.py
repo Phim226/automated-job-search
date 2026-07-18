@@ -5,7 +5,7 @@ import sqlite3
 from automated_job_search.config import ConfigLoader, Jobsite
 from automated_job_search.scraper.scraper import Scraper
 from automated_job_search.definitions import JOB_DATA_DIR
-from automated_job_search.storage import ConnectionManager, JobStorageManager
+from automated_job_search.storage import JobStorageManager
 from automated_job_search.filter.filter import JobFilter
 
 # TODO: Implement database query logging
@@ -72,8 +72,7 @@ class AutomatedJobSearch:
     def _initialise_all_objects(self):
         self.scraper = Scraper(self.job_sites)
         self.config_loader = ConfigLoader(self.job_sites)
-        self.con_manager = ConnectionManager(JOB_DATA_DIR/"job_database.db")
-        self.jsm = JobStorageManager(self.con_manager, self.job_sites)
+        self.jsm = JobStorageManager(self.job_sites)
         self.filter = JobFilter(self.scoring, self.disqualifiers)
 
     def _load_json_data(self) -> None:

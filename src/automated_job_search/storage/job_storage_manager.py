@@ -1,6 +1,4 @@
 import sqlite3
-from typing import Any
-from automated_job_search.storage.connection_manager import ConnectionManager
 from automated_job_search.config.job import Job, Jobsite, JobDetails
 from automated_job_search.definitions import JOB_DATA_DIR
 
@@ -10,8 +8,7 @@ class JobStorageManager:
     JOB_DETAILS: str = "job_details"
     JOB_SITE: str = "job_site"
 
-    def __init__(self, connection_manager: ConnectionManager, job_sites: dict[str, Jobsite]) -> None:
-        self.con_manager = connection_manager
+    def __init__(self, job_sites: dict[str, Jobsite]) -> None:
         self.job_sites = job_sites
         self.db_path = JOB_DATA_DIR/"job_database.db"
 
