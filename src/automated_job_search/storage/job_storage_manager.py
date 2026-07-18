@@ -1,6 +1,8 @@
+import sqlite3
 from typing import Any
 from automated_job_search.storage.connection_manager import ConnectionManager
 from automated_job_search.config.job import Job, Jobsite, JobDetails
+from automated_job_search.definitions import JOB_DATA_DIR
 
 class JobStorageManager:
 
@@ -91,31 +93,21 @@ class JobStorageManager:
 
         return self.con_manager.chain_query(queries)
 
-    def save_job_summary(self, jobs: list[Job]) -> list[Any]:
-        queries: list[str] = []
-        for job in jobs:
-            query = f"""
-                INSERT OR IGNORE INTO {self.JOB_SUMMARY} (
-                    job_id,
-                    title,
-                    company,
-                    city,
-                    country,
-                    job_site,
-                    score
-                ) VALUES(
-                    '{job.job_id}',
-                    '{job.title}',
-                    '{job.company}',
-                    '{job.city}',
-                    '{job.country}',
-                    '{job.job_site}',
-                    {job.score}
-                );
-            """
-            queries.append(query)
-
-        return self.con_manager.chain_query(queries)
+    def save_job_summary(self, jobs: list[Job]) -> None:
+        query = f"""
+            INSERT OR IGNORE INTO {self.JOB_SUMMARY} (
+                job_id,
+                title,
+                company,
+                city,
+                country,
+                job_site,
+                score
+            ) VALUES(?, ?, ?, ?, ?, ?, ?);
+        """
+        with sqlite3.connect(JOB_DATA_DIR/"job_database.db") as db:
+            cursor = db.cursor()
+            cursor.executemany(query, jobs)
 
     def select_top_scoring_job_summaries(self, minimum_score: int) -> list[tuple[str, str, str, str, str, str, int]]:
         query = f"""
