@@ -15,7 +15,7 @@ def load_sites() -> dict[str, Jobsite]:
 
     job_sites = dict()
     for site in jobsites_list:
-        job_sites[site["scraper"]] = (Jobsite(**site))
+        job_sites[site["name"]] = (Jobsite(**site))
 
     return job_sites
 

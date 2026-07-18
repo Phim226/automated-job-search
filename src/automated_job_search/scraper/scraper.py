@@ -26,7 +26,7 @@ class Scraper:
 
         results: list[dict[str, Any]] = response.json()["results"]
         for result in results:
-            result["job_site"] = self._jobsites["space_careers"].scraper
+            result["job_site"] = self._jobsites["space_careers"].name
 
         return results
 

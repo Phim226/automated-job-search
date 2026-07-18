@@ -41,4 +41,3 @@ class Jobsite(IterableDataClass):
     name: str
     url: str
     api: str
-    scraper: str
