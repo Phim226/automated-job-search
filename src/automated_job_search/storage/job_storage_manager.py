@@ -102,11 +102,16 @@ class JobStorageManager:
             cursor = db.cursor()
             cursor.executemany(query, jobs)
 
-    def select_top_scoring_job_summaries(self, minimum_score: int) -> list[tuple[str, str, str, str, str, str, int]]:
+    def select_top_scoring_job_summaries(self, minimum_score: int) -> list[tuple[str, str, str]]:
         query = f"""
-            SELECT * FROM {self.JOB_SUMMARY} WHERE score >= {minimum_score} ORDER BY score DESC;
+            SELECT job_id, title, job_site FROM {self.JOB_SUMMARY} WHERE score >= {minimum_score} ORDER BY score DESC;
         """
-        return self.con_manager.query(query)
+        with sqlite3.connect(self.db_path) as db:
+            cursor = db.cursor()
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+        return result
 
     def save_job_details(self, job_details: list[JobDetails]) -> list[Any]:
         queries: list[str] = []
