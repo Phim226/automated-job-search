@@ -9,8 +9,6 @@ from automated_job_search.definitions import JOB_DATA_DIR
 from automated_job_search.storage import JobStorageManager
 from automated_job_search.filter.filter import JobFilter
 
-# TODO: Implement database query logging
-
 def load_sites() -> dict[str, Jobsite]:
     with open(JOB_DATA_DIR/"job_sites.json", "r") as file:
         jobsites_list =  json.load(file)
