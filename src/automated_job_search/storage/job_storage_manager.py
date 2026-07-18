@@ -13,6 +13,7 @@ class JobStorageManager:
     def __init__(self, connection_manager: ConnectionManager, job_sites: dict[str, Jobsite]) -> None:
         self.con_manager = connection_manager
         self.job_sites = job_sites
+        self.db_path = JOB_DATA_DIR/"job_database.db"
 
     def drop_tables(self) -> None:
         drop_summary = f"DROP TABLE IF EXISTS {self.JOB_SUMMARY}"
@@ -32,7 +33,6 @@ class JobStorageManager:
         job_site_creation_query = f"""
             CREATE TABLE IF NOT EXISTS {self.JOB_SITE} (
                 site_id CHAR(50) PRIMARY KEY,
-                name CHAR(50),
                 url CHAR(50),
                 api VARCHAR(255)
             );
@@ -74,24 +74,17 @@ class JobStorageManager:
         return self.con_manager.chain_query([job_site_creation_query, job_summary_creation_query, job_details_creation_query])
 
     def populate_job_sites(self):
-        queries: list[str] = []
-        for site in self.job_sites.values():
-            query = f"""
-                INSERT OR IGNORE INTO {self.JOB_SITE} (
-                    site_id,
-                    name,
-                    url,
-                    api
-                ) VALUES(
-                    '{site.scraper}',
-                    '{site.name}',
-                    '{site.url}',
-                    '{site.api}'
-                );
-            """
-            queries.append(query)
+        query = f"""
+            INSERT OR IGNORE INTO {self.JOB_SITE} (
+                site_id,
+                url,
+                api
+            ) VALUES(?, ?, ?);
+        """
+        with sqlite3.connect(self.db_path) as db:
+            cursor = db.cursor()
+            cursor.executemany(query, self.job_sites.values())
 
-        return self.con_manager.chain_query(queries)
 
     def save_job_summary(self, jobs: list[Job]) -> None:
         query = f"""
@@ -105,7 +98,7 @@ class JobStorageManager:
                 score
             ) VALUES(?, ?, ?, ?, ?, ?, ?);
         """
-        with sqlite3.connect(JOB_DATA_DIR/"job_database.db") as db:
+        with sqlite3.connect(self.db_path) as db:
             cursor = db.cursor()
             cursor.executemany(query, jobs)
 
