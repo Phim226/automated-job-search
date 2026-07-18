@@ -2,11 +2,10 @@ import json
 import requests
 import sys
 import sqlite3
-from automated_job_search.config.config_loader import ConfigLoader
+from automated_job_search.config import ConfigLoader, Jobsite
 from automated_job_search.scraper.scraper import Scraper
 from automated_job_search.definitions import JOB_DATA_DIR
 from automated_job_search.storage import ConnectionManager, JobStorageManager
-from automated_job_search.config.job import Jobsite
 from automated_job_search.filter.filter import JobFilter
 
 
