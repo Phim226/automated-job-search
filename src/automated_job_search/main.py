@@ -44,11 +44,15 @@ class AutomatedJobSearch:
 
             jobs_dicts = self.scraper.get_jobs()
 
+            logging.info("Jobs scraped")
+
             jobs = self.config_loader.load_space_careers_job(jobs_dicts)
             filtered_jobs = self.filter.filter_jobs(jobs)
             self.filter.apply_scoring(filtered_jobs)
 
             self.jsm.save_job_summary(filtered_jobs)
+
+            logging.info("Job summaries saved to database")
 
             # Retrieves (job_id, title, job_site) of jobs scoring minimum_score or higher
             minimum_score = 10
@@ -59,8 +63,12 @@ class AutomatedJobSearch:
             # job details dictionary that is retrieved from space careers website
             job_detail_pair = list(zip(top_jobs_db_records, self.scraper.retrieve_spacecareers_job_details(top_jobs_ids)))
 
+            logging.info("Job details scraped")
+
             job_details = self.config_loader.load_space_careers_job_details(job_detail_pair)
             self.jsm.save_job_details(job_details)
+
+            logging.info("Job details saved to database")
 
         except requests.RequestException as error:
             logging.exception(f"Job retrieval failed: {error}")
@@ -69,6 +77,8 @@ class AutomatedJobSearch:
         except sqlite3.Error as error:
             logging.error(f"Database query failed: {error}")
             sys.exit(1)
+
+        logging.info("Job scraping completed")
 
 
 
@@ -85,5 +95,7 @@ class AutomatedJobSearch:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(filename = "job-scraper.log", encoding = "utf-8", level = logging.DEBUG)
+
     ajs = AutomatedJobSearch()
     ajs.search()
