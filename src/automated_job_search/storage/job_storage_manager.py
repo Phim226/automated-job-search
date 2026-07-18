@@ -29,7 +29,7 @@ class JobStorageManager:
         self.drop_tables()
         self.initialise_tables()
 
-    def create_tables(self) -> list[Any]:
+    def create_tables(self) -> None:
         job_site_creation_query = f"""
             CREATE TABLE IF NOT EXISTS {self.JOB_SITE} (
                 site_id CHAR(50) PRIMARY KEY,
@@ -71,7 +71,15 @@ class JobStorageManager:
                 FOREIGN KEY (job_site) REFERENCES {self.JOB_SITE}(site_id)
             );
         """
-        return self.con_manager.chain_query([job_site_creation_query, job_summary_creation_query, job_details_creation_query])
+        queries = [
+            job_site_creation_query,
+            job_summary_creation_query,
+            job_details_creation_query
+        ]
+        with sqlite3.connect(self.db_path) as db:
+            for query in queries:
+                cursor = db.cursor()
+                cursor.execute(query)
 
     def populate_job_sites(self):
         query = f"""
