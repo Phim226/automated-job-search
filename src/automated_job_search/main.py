@@ -2,6 +2,7 @@ import json
 import requests
 import sys
 import sqlite3
+import logging
 from automated_job_search.config import ConfigLoader, Jobsite
 from automated_job_search.scraper.scraper import Scraper
 from automated_job_search.definitions import JOB_DATA_DIR
@@ -60,11 +61,11 @@ class AutomatedJobSearch:
             self.jsm.save_job_details(job_details)
 
         except requests.RequestException as error:
-            print(f"Job retrieval failed: {error}")
+            logging.exception(f"Job retrieval failed: {error}")
             sys.exit(1)
 
         except sqlite3.Error as error:
-            print(f"Database query failed: {error}")
+            logging.error(f"Database query failed: {error}")
             sys.exit(1)
 
 
