@@ -52,9 +52,9 @@ class AutomatedJobSearch:
             self.jsm.save_job_summary(filtered_jobs)
 
             top_jobs_db_records = self.jsm.select_top_scoring_job_summaries(10)
-            top_jobs = self.config_loader.load_job_from_db(top_jobs_db_records)
+            top_jobs_ids = [record[0] for record in top_jobs_db_records]
 
-            job_detail_pair = list(zip(top_jobs, self.scraper.retrieve_spacecareers_job_details(top_jobs)))
+            job_detail_pair = list(zip(top_jobs_db_records, self.scraper.retrieve_spacecareers_job_details(top_jobs_ids)))
 
             job_details = self.config_loader.load_space_careers_job_details(job_detail_pair)
             self.jsm.save_job_details(job_details)

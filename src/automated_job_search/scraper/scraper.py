@@ -1,6 +1,6 @@
 import requests
 from typing import Any
-from automated_job_search.config.job import Jobsite, Job
+from automated_job_search.config.job import Jobsite
 
 class Scraper:
 
@@ -30,11 +30,11 @@ class Scraper:
 
         return results
 
-    def retrieve_spacecareers_job_details(self, jobs: list[Job]) -> list[dict[str, Any]]:
+    def retrieve_spacecareers_job_details(self, job_ids: list[str]) -> list[dict[str, Any]]:
         api = self._jobsites["space_careers"].api
         details = []
-        for job in jobs:
-            url = f"{api}{job.job_id}/"
+        for id in job_ids:
+            url = f"{api}{id}/"
 
             response = requests.get(url, timeout = 60)
             response.raise_for_status()
