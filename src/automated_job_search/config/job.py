@@ -23,7 +23,10 @@ class Job(IterableDataClass):
     score: int
 
 @dataclass
-class JobDetails(Job):
+class JobDetails(IterableDataClass):
+    job_id: str
+    title: str
+    job_site: str
     data_posted: str
     duration: str | None
     deadline: str | None
