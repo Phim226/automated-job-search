@@ -1,4 +1,5 @@
 import sqlite3
+import logging
 from automated_job_search.config.job import Job, Jobsite, JobDetails
 from automated_job_search.definitions import JOB_DATA_DIR
 
@@ -21,7 +22,11 @@ class JobStorageManager:
         with sqlite3.connect(self.db_path) as db:
             for query in queries:
                 cursor = db.cursor()
-                cursor.execute(query)
+                try:
+                    cursor.execute(query)
+                except sqlite3.Error:
+                    logging.exception(f"Execution failed for query: {query}")
+                    raise
 
     def initialise_tables(self) -> None:
         self.create_tables()
@@ -81,7 +86,11 @@ class JobStorageManager:
         with sqlite3.connect(self.db_path) as db:
             for query in queries:
                 cursor = db.cursor()
-                cursor.execute(query)
+                try:
+                    cursor.execute(query)
+                except sqlite3.Error:
+                    logging.exception(f"Execution failed for query: {query}")
+                    raise
 
     def populate_job_sites(self):
         query = f"""
@@ -93,8 +102,11 @@ class JobStorageManager:
         """
         with sqlite3.connect(self.db_path) as db:
             cursor = db.cursor()
-            cursor.executemany(query, self.job_sites.values())
-
+            try:
+                cursor.executemany(query, self.job_sites.values())
+            except sqlite3.Error:
+                logging.exception(f"Execution failed for query: {query}")
+                raise
 
     def save_job_summary(self, jobs: list[Job]) -> None:
         query = f"""
@@ -110,7 +122,11 @@ class JobStorageManager:
         """
         with sqlite3.connect(self.db_path) as db:
             cursor = db.cursor()
-            cursor.executemany(query, jobs)
+            try:
+                cursor.executemany(query, jobs)
+            except sqlite3.Error:
+                logging.exception(f"Execution failed for query: {query}")
+                raise
 
     def select_top_scoring_job_summaries(self, minimum_score: int) -> list[tuple[str, str, str]]:
         query = f"""
@@ -118,8 +134,12 @@ class JobStorageManager:
         """
         with sqlite3.connect(self.db_path) as db:
             cursor = db.cursor()
-            cursor.execute(query)
-            result = cursor.fetchall()
+            try:
+                cursor.execute(query)
+                result = cursor.fetchall()
+            except sqlite3.Error:
+                logging.exception(f"Execution failed for query: {query}")
+                raise
 
         return result
 
@@ -144,4 +164,8 @@ class JobStorageManager:
         """
         with sqlite3.connect(self.db_path) as db:
             cursor = db.cursor()
-            cursor.executemany(query, job_details)
+            try:
+                cursor.executemany(query, job_details)
+            except sqlite3.Error:
+                logging.exception(f"Execution failed for query: {query}")
+                raise
