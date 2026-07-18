@@ -1,7 +1,19 @@
 from dataclasses import dataclass, fields
 
 @dataclass
-class Job:
+class IterableDataClass:
+
+    def __iter__(self):
+        return iter(tuple(getattr(self, field.name) for field in fields(self)))
+
+    def __len__(self) -> int:
+        return len(fields(self))
+
+    def __getitem__(self, key):
+        return getattr(self, fields(self)[key].name)
+
+@dataclass
+class Job(IterableDataClass):
     job_id: str
     title: str
     company: str
@@ -9,9 +21,6 @@ class Job:
     country: str
     job_site: str
     score: int
-
-    def __iter__(self):
-        return iter(tuple(getattr(self, field.name) for field in fields(self)))
 
 @dataclass
 class JobDetails(Job):
@@ -27,10 +36,8 @@ class JobDetails(Job):
     application_url: str
     advert_url: str
 
-
-
 @dataclass
-class Jobsite:
+class Jobsite(IterableDataClass):
     name: str
     url: str
     api: str
