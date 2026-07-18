@@ -113,42 +113,25 @@ class JobStorageManager:
 
         return result
 
-    def save_job_details(self, job_details: list[JobDetails]) -> list[Any]:
-        queries: list[str] = []
-        for details in job_details:
-            query = f"""
-                INSERT OR IGNORE INTO {self.JOB_DETAILS} (
-                    job_id,
-                    title,
-                    job_site,
-                    date_posted,
-                    duration,
-                    deadline,
-                    rolling_deadline,
-                    on_site_remote,
-                    salary_range_lower,
-                    salary_range_upper,
-                    expired,
-                    advert_url,
-                    application_url,
-                    description
-                ) VALUES(
-                    '{details.job_id}',
-                    '{details.title}',
-                    '{details.job_site}',
-                    '{details.data_posted}',
-                    {f"'{details.duration}'" if details.duration else "NULL"},
-                    {f"'{details.deadline}'" if details.deadline else "NULL"},
-                    {details.rolling_deadline},
-                    {f"'{details.on_site_remote}'" if details.on_site_remote else "NULL"},
-                    {f"'{details.salary_range_lower}'" if details.salary_range_lower else "NULL"},
-                    {f"'{details.salary_range_upper}'" if details.salary_range_upper else "NULL"},
-                    {details.expired},
-                    '{details.advert_url}',
-                    '{details.application_url}',
-                    '{details.description.replace("'", "''")}'
-                );
-            """
-            queries.append(query)
-
-        return self.con_manager.chain_query(queries)
+    def save_job_details(self, job_details: list[JobDetails]) -> None:
+        query = f"""
+            INSERT OR IGNORE INTO {self.JOB_DETAILS} (
+                job_id,
+                title,
+                job_site,
+                date_posted,
+                duration,
+                deadline,
+                rolling_deadline,
+                salary_range_lower,
+                salary_range_upper,
+                expired,
+                on_site_remote,
+                description,
+                application_url,
+                advert_url
+            ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        """
+        with sqlite3.connect(self.db_path) as db:
+            cursor = db.cursor()
+            cursor.executemany(query, job_details)
