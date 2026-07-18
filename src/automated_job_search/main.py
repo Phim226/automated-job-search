@@ -50,9 +50,13 @@ class AutomatedJobSearch:
 
             self.jsm.save_job_summary(filtered_jobs)
 
-            top_jobs_db_records = self.jsm.select_top_scoring_job_summaries(10)
-            top_jobs_ids = [record[0] for record in top_jobs_db_records]
+            # Retrieves (job_id, title, job_site) of jobs scoring minimum_score or higher
+            minimum_score = 10
+            top_jobs_db_records = self.jsm.select_top_scoring_job_summaries(minimum_score)
+            top_jobs_ids = [record[0] for record in top_jobs_db_records] # Job ids are required in list form for the retrieval of the job details
 
+            # The function that loads the JobDetails objects takes a list of the (job_id, title, job_site) tuples and the associated
+            # job details dictionary that is retrieved from space careers website
             job_detail_pair = list(zip(top_jobs_db_records, self.scraper.retrieve_spacecareers_job_details(top_jobs_ids)))
 
             job_details = self.config_loader.load_space_careers_job_details(job_detail_pair)
