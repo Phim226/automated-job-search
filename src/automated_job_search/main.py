@@ -44,6 +44,7 @@ class AutomatedJobSearch:
 
             jobs_dicts = self.scraper.get_jobs()
 
+            # test change
             jobs = self.config_loader.load_space_careers_job(jobs_dicts)
             filtered_jobs = self.filter.filter_jobs(jobs)
             self.filter.apply_scoring(filtered_jobs)
