@@ -30,7 +30,7 @@ class ConfigLoader:
 
         return jobs
 
-    def load_space_careers_job_details(self, job_info_pair: list[tuple[Job, dict[str, Any]]]) -> list[JobDetails]:
+    def load_space_careers_job_details(self, job_info_pair: list[tuple[tuple[str, str, str], dict[str, Any]]]) -> list[JobDetails]:
         job_details = []
 
         for job_summary, details in job_info_pair:
@@ -61,7 +61,7 @@ class ConfigLoader:
                     on_site_remote = details["on_site_remote"].lower() if details["on_site_remote"] else None, # Space careers jobs sometimes don't have entries for the on_site_remote field
                     description = details["description"],
                     application_url = details["link_to_application_form"],
-                    advert_url = f"{self._job_sites["space_careers"].url}{job_summary.job_id}"
+                    advert_url = f"{self._job_sites["space_careers"].url}{job_summary[0]}"
                 )
             )
 
