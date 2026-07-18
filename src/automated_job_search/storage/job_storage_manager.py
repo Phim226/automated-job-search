@@ -16,10 +16,15 @@ class JobStorageManager:
         self.db_path = JOB_DATA_DIR/"job_database.db"
 
     def drop_tables(self) -> None:
-        drop_summary = f"DROP TABLE IF EXISTS {self.JOB_SUMMARY}"
-        drop_details = f"DROP TABLE IF EXISTS {self.JOB_DETAILS}"
-        drop_sites = f"DROP TABLE IF EXISTS {self.JOB_SITE}"
-        self.con_manager.chain_query([drop_details, drop_summary, drop_sites])
+        queries =  [
+            f"DROP TABLE IF EXISTS {self.JOB_SUMMARY}",
+            f"DROP TABLE IF EXISTS {self.JOB_DETAILS}",
+            f"DROP TABLE IF EXISTS {self.JOB_SITE}"
+        ]
+        with sqlite3.connect(self.db_path) as db:
+            for query in queries:
+                cursor = db.cursor()
+                cursor.execute(query)
 
     def initialise_tables(self) -> None:
         self.create_tables()
