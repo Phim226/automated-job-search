@@ -4,10 +4,10 @@ import sys
 import sqlite3
 import logging
 from automated_job_search.config import ConfigLoader, Jobsite
-from automated_job_search.scraper.scraper import Scraper
+from automated_job_search.scraper import Scraper
 from automated_job_search.definitions import JOB_DATA_DIR
 from automated_job_search.storage import JobStorageManager
-from automated_job_search.filter.filter import JobFilter
+from automated_job_search.filter import JobFilter
 
 def load_sites() -> dict[str, Jobsite]:
     with open(JOB_DATA_DIR/"job_sites.json", "r") as file:
