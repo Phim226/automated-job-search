@@ -98,6 +98,9 @@ class AutomatedJobSearch:
 
         logging.info("Job details saved to database")
 
+    def _report_jobs(self) -> None:
+        pass
+
 if __name__ == "__main__":
     logging.basicConfig(filename = "job-scraper.log", encoding = "utf-8", level = logging.DEBUG)
 
