@@ -116,8 +116,9 @@ class AutomatedJobSearch:
         logger.info("Job details scraped")
 
         job_details = self.config_loader.load_space_careers_job_details(job_detail_pair)
+        filtered_details = self.filter.filter_details(job_details)
         # TODO: Score job details
-        self.jsm.save_job_details(job_details)
+        self.jsm.save_job_details(filtered_details)
 
         logger.info("Job details saved to database")
 
