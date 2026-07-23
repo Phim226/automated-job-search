@@ -8,6 +8,7 @@ from automated_job_search.scraper import Scraper
 from automated_job_search.definitions import JOB_DATA_DIR
 from automated_job_search.storage import JobStorageManager
 from automated_job_search.filter import JobFilter
+from automated_job_search.report import TopJobsReport, Email
 
 def load_sites() -> dict[str, Jobsite]:
     with open(JOB_DATA_DIR/"job_sites.json", "r") as file:
@@ -44,6 +45,7 @@ class AutomatedJobSearch:
 
             self._initial_job_processing()
             self._job_details_processing()
+            self._report_jobs()
 
         except requests.RequestException as error:
             logging.exception(f"Job retrieval failed: {error}")
@@ -101,7 +103,11 @@ class AutomatedJobSearch:
         logging.info("Job details saved to database")
 
     def _report_jobs(self) -> None:
-        pass
+        minimum_score = 10
+        top_job_details_db = self.jsm.select_top_scoring_job_details(minimum_score)
+        job_details = self.config_loader.load_job_details_from_db(top_job_details_db)
+        top_jobs_report = TopJobsReport(job_details)
+        Email(top_jobs_report.text, top_jobs_report.title).send_email()
 
 if __name__ == "__main__":
     logging.basicConfig(filename = "job-scraper.log", encoding = "utf-8", level = logging.DEBUG)
