@@ -32,6 +32,26 @@ def load_disqualifiers() -> dict[str, list[str]]:
 
     return disqualifiars
 
+def configure_log() -> None:
+    global logger
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # File output
+    file_handler = logging.FileHandler("job-scraper.log", encoding = "utf-8")
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+
+    # Terminal output
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.INFO)
+    stream_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
+
 
 class AutomatedJobSearch:
 
@@ -48,14 +68,14 @@ class AutomatedJobSearch:
             self._report_jobs()
 
         except requests.RequestException as error:
-            logging.exception(f"Job retrieval failed: {error}")
+            logger.exception(f"Job retrieval failed: {error}")
             sys.exit(1)
 
         except sqlite3.Error as error:
-            logging.error(f"Database query failed: {error}")
+            logger.error(f"Database query failed: {error}")
             sys.exit(1)
 
-        logging.info("Job scraping completed")
+        logger.info("Job scraping completed")
 
 
 
@@ -73,18 +93,17 @@ class AutomatedJobSearch:
     def _initial_job_processing(self) -> None:
         jobs_dicts = self.scraper.get_jobs()
 
-        logging.info("Jobs scraped")
+        logger.info("Jobs scraped")
 
         jobs = self.config_loader.load_space_careers_job(jobs_dicts)
         filtered_jobs = self.filter.filter_jobs(jobs)
-        self.filter.apply_scoring(filtered_jobs)
+        self.filter.job_summary_scoring(filtered_jobs)
 
         self.jsm.save_job_summary(filtered_jobs)
 
-        logging.info("Job summaries saved to database")
+        logger.info("Job summaries saved to database")
 
     def _job_details_processing(self) -> None:
-        # Retrieves jobs scoring minimum_score or higher
         minimum_score = 10
         top_jobs_db_records = self.jsm.select_top_scoring_job_summaries(minimum_score)
         top_jobs = self.config_loader.load_job_from_db(top_jobs_db_records)
@@ -94,13 +113,13 @@ class AutomatedJobSearch:
         # job details dictionary that is retrieved from space careers website
         job_detail_pair = list(zip(top_jobs, self.scraper.retrieve_spacecareers_job_details(top_jobs_ids)))
 
-        logging.info("Job details scraped")
+        logger.info("Job details scraped")
 
         job_details = self.config_loader.load_space_careers_job_details(job_detail_pair)
         # TODO: Score job details
         self.jsm.save_job_details(job_details)
 
-        logging.info("Job details saved to database")
+        logger.info("Job details saved to database")
 
     def _report_jobs(self) -> None:
         minimum_score = 10
@@ -109,8 +128,10 @@ class AutomatedJobSearch:
         top_jobs_report = TopJobsReport(job_details)
         Email(top_jobs_report.text, top_jobs_report.title).send_email()
 
+        logger.info("Job reports emailed")
+
 if __name__ == "__main__":
-    logging.basicConfig(filename = "job-scraper.log", encoding = "utf-8", level = logging.DEBUG)
+    configure_log()
 
     ajs = AutomatedJobSearch()
     ajs.search()
