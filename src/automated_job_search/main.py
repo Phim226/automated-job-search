@@ -90,7 +90,7 @@ class AutomatedJobSearch:
 
         # The function that loads the JobDetails objects takes a list of the (job_id, title, job_site) tuples and the associated
         # job details dictionary that is retrieved from space careers website
-        job_detail_pair = list(zip(top_jobs_db_records, self.scraper.retrieve_spacecareers_job_details(top_jobs_ids)))
+        job_detail_pair = list(zip(top_jobs, self.scraper.retrieve_spacecareers_job_details(top_jobs_ids)))
 
         logging.info("Job details scraped")
 
