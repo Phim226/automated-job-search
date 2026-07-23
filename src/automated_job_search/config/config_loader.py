@@ -1,5 +1,5 @@
 from typing import Any
-from automated_job_search.config.job import Job, JobDetails, Jobsite
+from automated_job_search.config.job import Job, JobDetails, Jobsite, JobDetailsDB, JobDB
 
 class ConfigLoader:
 
@@ -23,7 +23,7 @@ class ConfigLoader:
 
         return jobs
 
-    def load_job_from_db(self, job_db_entries: list[tuple[str, str, str, str, str, str, int]]) -> list[Job]:
+    def load_job_from_db(self, job_db_entries: list[JobDB]) -> list[Job]:
         jobs = []
         for job in job_db_entries:
             jobs.append(Job(*job))
