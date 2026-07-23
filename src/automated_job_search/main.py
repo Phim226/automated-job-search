@@ -10,6 +10,16 @@ from automated_job_search.storage import JobStorageManager
 from automated_job_search.filter import JobFilter
 from automated_job_search.report import TopJobsReport, Email
 
+# TODO: Implement scrape date to determine when a job is new
+# TODO: Implement expiration data checking to determine when a job is about to expire
+# TODO: Include more websites in scraping (airbus, bae, leonardo, sstl, qinetiq etc)
+# TODO: Implement multithreading/parallel http requests
+# TODO: Once other sites are being scraped, detect duplicates
+# TODO: Write some tests
+# TODO: Improve documentation
+# TODO: Move all of these todos to github issues
+# TODO: Schedule script on system
+
 def load_sites() -> dict[str, Jobsite]:
     with open(JOB_DATA_DIR/"job_sites.json", "r") as file:
         jobsites_list =  json.load(file)
