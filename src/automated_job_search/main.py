@@ -96,7 +96,7 @@ class AutomatedJobSearch:
         logger.info("Jobs scraped")
 
         jobs = self.config_loader.load_space_careers_job(jobs_dicts)
-        filtered_jobs = self.filter.filter_jobs(jobs)
+        filtered_jobs = self.filter.first_job_filter(jobs)
         self.filter.job_summary_scoring(filtered_jobs)
 
         self.jsm.save_job_summary(filtered_jobs)

@@ -8,7 +8,7 @@ class JobFilter:
         self.disqualifiers = disqualifiers
 
 
-    def filter_jobs(self, jobs_list: list[Job]) -> list[Job]:
+    def first_job_filter(self, jobs_list: list[Job]) -> list[Job]:
         filtered_list = []
         job_disqualified = False
         for job in jobs_list:
