@@ -14,3 +14,6 @@ __pycache__/
 
 # Log file
 job-scraper.log
+
+# Local database
+/job_data/job_database.db
