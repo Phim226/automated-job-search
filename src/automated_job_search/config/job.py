@@ -10,6 +10,11 @@ class IterableDataClass:
         return len(fields(self))
 
     def __getitem__(self, key):
+        _fields = fields(self)
+
+        if isinstance(key, slice):
+            return tuple(getattr(self, field.name) for field in _fields[key])
+
         return getattr(self, fields(self)[key].name)
 
 @dataclass
