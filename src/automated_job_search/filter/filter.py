@@ -1,9 +1,10 @@
 from typing import Any
 from automated_job_search.config import Job, JobDetails
+from automated_job_search.definitions import Disqualifiers, Scores
 
 class JobFilter:
 
-    def __init__(self, scoring: dict[str, dict[str, int]], disqualifiers: dict[str, list[str]]) -> None:
+    def __init__(self, scoring: Scores, disqualifiers: Disqualifiers) -> None:
         self.scoring = scoring
         self.disqualifiers = disqualifiers
 

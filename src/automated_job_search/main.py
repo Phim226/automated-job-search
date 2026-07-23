@@ -5,7 +5,7 @@ import sqlite3
 import logging
 from automated_job_search.config import ConfigLoader, Jobsite
 from automated_job_search.scraper import Scraper
-from automated_job_search.definitions import JOB_DATA_DIR
+from automated_job_search.definitions import JOB_DATA_DIR, Disqualifiers, Scores
 from automated_job_search.storage import JobStorageManager
 from automated_job_search.filter import JobFilter
 from automated_job_search.report import TopJobsReport, Email
@@ -20,15 +20,15 @@ def load_sites() -> dict[str, Jobsite]:
 
     return job_sites
 
-def load_scoring() -> dict[str, dict[str, int]]:
+def load_scoring() -> Scores:
     with open(JOB_DATA_DIR/"scoring.json") as file:
-        scoring: dict[str, dict[str, int]] = json.load(file)
+        scoring: Scores = json.load(file)
 
     return scoring
 
-def load_disqualifiers() -> dict[str, list[str]]:
+def load_disqualifiers() -> Disqualifiers:
     with open(JOB_DATA_DIR/"disqualifiars.json") as file:
-        disqualifiars: dict[str, list[str]] = json.load(file)
+        disqualifiars: Disqualifiers = json.load(file)
 
     return disqualifiars
 
