@@ -27,6 +27,30 @@ class JobFilter:
 
         return filtered_list
 
+    def filter_details(self, details_list: list[JobDetails]) -> list[JobDetails]:
+        filtered_list = []
+        job_disqualified = False
+        for job in details_list:
+            try:
+                salary_range_lower = job.salary_range_lower
+                salary_lower = float(salary_range_lower) if salary_range_lower else 0
+
+            except ValueError:
+                salary_lower = 0
+
+            assert isinstance(self.disqualifiers["max_salary"], float)
+            if salary_lower > self.disqualifiers["max_salary"]:
+                job_disqualified = True
+
+            if job_disqualified:
+                job_disqualified = False
+                continue
+
+            filtered_list.append(job)
+
+        return filtered_list
+
+
     def job_summary_scoring(self, jobs_list: list[Job]) -> None:
         scored_fields = ["country", "city", "title"]
         for job in jobs_list:
