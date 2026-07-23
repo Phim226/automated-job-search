@@ -1,6 +1,7 @@
 import sqlite3
 import logging
-from automated_job_search.config.job import Job, Jobsite, JobDetails
+from typing import Any
+from automated_job_search.config import Job, Jobsite, JobDetails, JobDB, JobDetailsDB
 from automated_job_search.definitions import JOB_DATA_DIR
 
 class JobStorageManager:
@@ -128,7 +129,7 @@ class JobStorageManager:
                 logging.exception(f"Execution failed for query: {query}")
                 raise
 
-    def select_top_scoring_job_summaries(self, minimum_score: int) -> list[tuple[str, str, str, str, str, str, int]]:
+    def select_top_scoring_job_summaries(self, minimum_score: int) -> list[JobDB]:
         query = f"""
             SELECT * FROM {self.JOB_SUMMARY} WHERE score >= {minimum_score} ORDER BY score DESC;
         """
