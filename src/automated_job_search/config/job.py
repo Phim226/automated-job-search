@@ -1,5 +1,8 @@
 from dataclasses import dataclass, fields
 
+type JobDB = tuple[str, str, str, str, str, str, int]
+type JobDetailsDB = tuple[str, str, str, str, str, str, int, str, str, str, bool, str, str, bool, str, str, str, str]
+
 @dataclass
 class IterableDataClass:
 
