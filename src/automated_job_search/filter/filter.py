@@ -1,4 +1,5 @@
-from automated_job_search.config.job import Job
+from typing import Any
+from automated_job_search.config import Job, JobDetails
 
 class JobFilter:
 
@@ -24,20 +25,18 @@ class JobFilter:
 
         return filtered_list
 
-    def apply_scoring(self, jobs_list: list[Job]) -> None:
-        country_scores = self.scoring["country"]
-        city_scores = self.scoring["city"]
-        title_scores = self.scoring["title"]
-
+    def job_summary_scoring(self, jobs_list: list[Job]) -> None:
+        scored_fields = ["country", "city", "title"]
         for job in jobs_list:
-            for country, score in country_scores.items():
-                if country in job.country:
-                    job.score += score
+            for field in scored_fields:
+                job.score += self._apply_scoring(field, job)
 
-            for city, score in city_scores.items():
-                if city in job.city:
-                    job.score += score
 
-            for title, score in title_scores.items():
-                if title in job.title:
-                    job.score += score
+    def _apply_scoring(self, field: str, job: Job | JobDetails) -> Any:
+        scores = self.scoring[field]
+        field_score = 0
+        for key, score in scores.items():
+            if key in getattr(job, field):
+                field_score += score
+
+        return field_score
