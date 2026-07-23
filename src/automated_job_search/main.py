@@ -36,13 +36,13 @@ class AutomatedJobSearch:
 
     def search(self) -> None:
         self._load_json_data()
-        self._initialise_all_objects()
+        self._initialise_objects()
 
         try:
             # TODO: Reinitialisation should be removed eventually. Tables should persist and be checked for new expirations to keep data valid
             self.jsm.reinitialise_tables()
 
-            self._initialise_job_processing()
+            self._initial_job_processing()
             self._job_details_processing()
 
         except requests.RequestException as error:
@@ -57,7 +57,7 @@ class AutomatedJobSearch:
 
 
 
-    def _initialise_all_objects(self):
+    def _initialise_objects(self):
         self.scraper = Scraper(self.job_sites)
         self.config_loader = ConfigLoader(self.job_sites)
         self.jsm = JobStorageManager(self.job_sites)
@@ -68,7 +68,7 @@ class AutomatedJobSearch:
         self.scoring = load_scoring()
         self.disqualifiers = load_disqualifiers()
 
-    def _initialise_job_processing(self) -> None:
+    def _initial_job_processing(self) -> None:
         jobs_dicts = self.scraper.get_jobs()
 
         logging.info("Jobs scraped")
@@ -82,13 +82,13 @@ class AutomatedJobSearch:
         logging.info("Job summaries saved to database")
 
     def _job_details_processing(self) -> None:
-        # Retrieves (job_id, title, job_site) of jobs scoring minimum_score or higher
+        # Retrieves jobs scoring minimum_score or higher
         minimum_score = 10
         top_jobs_db_records = self.jsm.select_top_scoring_job_summaries(minimum_score)
         top_jobs = self.config_loader.load_job_from_db(top_jobs_db_records)
         top_jobs_ids = [record[0] for record in top_jobs_db_records] # Job ids are required in list form for the retrieval of the job details
 
-        # The function that loads the JobDetails objects takes a list of the (job_id, title, job_site) tuples and the associated
+        # The function that loads the JobDetails objects takes a list of the Jobs and the associated
         # job details dictionary that is retrieved from space careers website
         job_detail_pair = list(zip(top_jobs, self.scraper.retrieve_spacecareers_job_details(top_jobs_ids)))
 
