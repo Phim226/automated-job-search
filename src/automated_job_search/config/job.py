@@ -1,5 +1,6 @@
 from dataclasses import dataclass, fields
 
+# Datatypes of SELECT query results needed to populate the corresponding class
 type JobDB = tuple[str, str, str, str, str, str, int]
 type JobDetailsDB = tuple[str, str, str, str, str, str, int, str, str, str, bool, str, str, bool, str, str, str, str]
 
