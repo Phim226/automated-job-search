@@ -13,6 +13,7 @@ class JobFilter:
         filtered_list = []
         job_disqualified = False
         for job in jobs_list:
+            assert isinstance(self.disqualifiers["title"], list)
             for title_disqualifer in self.disqualifiers["title"]:
                 if title_disqualifer in job.title:
                     job_disqualified = True
