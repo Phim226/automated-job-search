@@ -95,6 +95,7 @@ class AutomatedJobSearch:
         logging.info("Job details scraped")
 
         job_details = self.config_loader.load_space_careers_job_details(job_detail_pair)
+        # TODO: Score job details
         self.jsm.save_job_details(job_details)
 
         logging.info("Job details saved to database")
