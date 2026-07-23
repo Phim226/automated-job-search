@@ -133,16 +133,7 @@ class JobStorageManager:
         query = f"""
             SELECT * FROM {self.JOB_SUMMARY} WHERE score >= {minimum_score} ORDER BY score DESC;
         """
-        with sqlite3.connect(self.db_path) as db:
-            cursor = db.cursor()
-            try:
-                cursor.execute(query)
-                result = cursor.fetchall()
-            except sqlite3.Error:
-                logging.exception(f"Execution failed for query: {query}")
-                raise
-
-        return result
+        return self._select_query(query)
 
     def save_job_details(self, job_details: list[JobDetails]) -> None:
         query = f"""
@@ -171,3 +162,42 @@ class JobStorageManager:
             except sqlite3.Error:
                 logging.exception(f"Execution failed for query: {query}")
                 raise
+
+    def select_top_scoring_job_details(self, minimum_score: int) -> list[JobDetailsDB]:
+        query = f"""
+            SELECT
+                {self.JOB_SUMMARY}.job_id,
+                {self.JOB_SUMMARY}.title,
+                {self.JOB_SUMMARY}.company,
+                {self.JOB_SUMMARY}.city,
+                {self.JOB_SUMMARY}.country,
+                {self.JOB_SUMMARY}.job_site,
+                {self.JOB_SUMMARY}.score,
+                {self.JOB_DETAILS}.date_posted,
+                {self.JOB_DETAILS}.duration,
+                {self.JOB_DETAILS}.deadline,
+                {self.JOB_DETAILS}.rolling_deadline,
+                {self.JOB_DETAILS}.on_site_remote,
+                {self.JOB_DETAILS}.salary_range_lower,
+                {self.JOB_DETAILS}.salary_range_upper,
+                {self.JOB_DETAILS}.expired,
+                {self.JOB_DETAILS}.advert_url,
+                {self.JOB_DETAILS}.application_url,
+                {self.JOB_DETAILS}.description
+            FROM {self.JOB_SUMMARY}, {self.JOB_DETAILS}
+            WHERE score >= {minimum_score} AND {self.JOB_SUMMARY}.job_id = {self.JOB_DETAILS}.job_id
+            ORDER BY score DESC;
+        """
+        return self._select_query(query)
+
+    def _select_query(self, query) -> list[Any]:
+        with sqlite3.connect(self.db_path) as db:
+                    cursor = db.cursor()
+                    try:
+                        cursor.execute(query)
+                        result = cursor.fetchall()
+                    except sqlite3.Error:
+                        logging.exception(f"Execution failed for query: {query}")
+                        raise
+
+        return result
