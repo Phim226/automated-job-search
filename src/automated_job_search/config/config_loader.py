@@ -30,7 +30,7 @@ class ConfigLoader:
 
         return jobs
 
-    def load_space_careers_job_details(self, job_info_pair: list[tuple[tuple[str, str, str], dict[str, Any]]]) -> list[JobDetails]:
+    def load_space_careers_job_details(self, job_info_pair: list[tuple[Job, dict[str, Any]]]) -> list[JobDetails]:
         job_details = []
 
         for job_summary, details in job_info_pair:
