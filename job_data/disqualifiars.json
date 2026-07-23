@@ -38,6 +38,9 @@
         "optical",
         "assembly",
         "robotics",
-        "technician"
-    ]
+        "technician",
+        "cloud"
+    ],
+
+    "max_salary" : 50000
 }
