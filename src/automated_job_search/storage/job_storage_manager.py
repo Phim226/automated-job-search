@@ -165,7 +165,8 @@ class JobStorageManager:
         with sqlite3.connect(self.db_path) as db:
             cursor = db.cursor()
             try:
-                cursor.executemany(query, job_details)
+                db_details = [(*job_detail[:2], job_detail[5], *job_detail[7:]) for job_detail in job_details]
+                cursor.executemany(query, db_details)
             except sqlite3.Error:
                 logging.exception(f"Execution failed for query: {query}")
                 raise
