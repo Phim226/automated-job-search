@@ -30,6 +30,13 @@ class ConfigLoader:
 
         return jobs
 
+    def load_job_details_from_db(self, job_db_entries: list[JobDetailsDB]) -> list[JobDetails]:
+            jobs = []
+            for job in job_db_entries:
+                jobs.append(JobDetails(*job))
+
+            return jobs
+
     def load_space_careers_job_details(self, job_info_pair: list[tuple[Job, dict[str, Any]]]) -> list[JobDetails]:
         job_details = []
 
