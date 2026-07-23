@@ -128,9 +128,9 @@ class JobStorageManager:
                 logging.exception(f"Execution failed for query: {query}")
                 raise
 
-    def select_top_scoring_job_summaries(self, minimum_score: int) -> list[tuple[str, str, str]]:
+    def select_top_scoring_job_summaries(self, minimum_score: int) -> list[tuple[str, str, str, str, str, str, int]]:
         query = f"""
-            SELECT job_id, title, job_site FROM {self.JOB_SUMMARY} WHERE score >= {minimum_score} ORDER BY score DESC;
+            SELECT * FROM {self.JOB_SUMMARY} WHERE score >= {minimum_score} ORDER BY score DESC;
         """
         with sqlite3.connect(self.db_path) as db:
             cursor = db.cursor()
