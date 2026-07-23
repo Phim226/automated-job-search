@@ -149,8 +149,8 @@ class JobStorageManager:
                 salary_range_upper,
                 expired,
                 on_site_remote,
-                application_url,
                 advert_url,
+                application_url,
                 description
             ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         """
