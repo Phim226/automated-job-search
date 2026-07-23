@@ -158,9 +158,9 @@ class JobStorageManager:
                 salary_range_upper,
                 expired,
                 on_site_remote,
-                description,
                 application_url,
-                advert_url
+                advert_url,
+                description
             ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         """
         with sqlite3.connect(self.db_path) as db:
